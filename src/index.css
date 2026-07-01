@@ -1,0 +1,21 @@
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #1a1206;
+}
+
+/* Respect device safe areas (iPhone notch / home indicator). */
+.app-shell {
+  padding-left: max(env(safe-area-inset-left), 0px);
+  padding-right: max(env(safe-area-inset-right), 0px);
+  padding-bottom: env(safe-area-inset-bottom);
+}
