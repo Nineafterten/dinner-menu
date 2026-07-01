@@ -67,7 +67,6 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
           mt="xs"
           checked={Boolean(meal.ready)}
           onChange={(e) => onToggleReady(meal.id, e.currentTarget.checked)}
-          disabled={!editMode}
           color="amber"
           label={
             meal.ready ? 'Ready to make right now' : 'Not stocked right now'
