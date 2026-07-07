@@ -1,12 +1,13 @@
-// Single entry point for data access. Picks Supabase when configured, else
-// localStorage. Everything else in the app imports `repository` from here and
-// stays agnostic about the backend.
+// Single entry point for data access.
+// - Supabase configured -> offline-first repository (local cache + background sync)
+// - not configured       -> pure localStorage repository
+// Everything else in the app imports `repository` and stays backend-agnostic.
 import { isSupabaseConfigured } from '../lib/supabase'
 import { localRepository } from './localRepository'
-import { supabaseRepository } from './supabaseRepository'
+import { offlineRepository } from './offlineRepository'
 
 export const repository = isSupabaseConfigured
-  ? supabaseRepository
+  ? offlineRepository
   : localRepository
 
 export const backend = isSupabaseConfigured ? 'supabase' : 'local'

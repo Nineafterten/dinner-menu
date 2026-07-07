@@ -19,13 +19,14 @@ import {
   Title,
 } from '@mantine/core'
 import { useMeals } from './hooks/useMeals'
-import { backend } from './data/repository'
+import { useSyncStatus } from './hooks/useSyncStatus'
 import { CATEGORIES } from './lib/categories'
 import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
 
 export default function App() {
   const { meals, loading, error, createMeal, updateMeal, removeMeal } = useMeals()
+  const sync = useSyncStatus()
 
   const [editMode, setEditMode] = useState(false)
   const [query, setQuery] = useState('')
@@ -78,17 +79,7 @@ export default function App() {
           <Group gap="xs" wrap="nowrap">
             <Text fz={24}>🍽️</Text>
             <Title order={3}>Dinner Menu</Title>
-            <Badge
-              variant="light"
-              color={backend === 'supabase' ? 'teal' : 'gray'}
-              title={
-                backend === 'supabase'
-                  ? 'Synced across your devices'
-                  : 'Stored on this device only — add Supabase keys to sync'
-              }
-            >
-              {backend === 'supabase' ? 'Synced' : 'Local'}
-            </Badge>
+            <SyncBadge sync={sync} />
           </Group>
           <Switch
             checked={editMode}
@@ -186,6 +177,50 @@ export default function App() {
         onDelete={removeMeal}
       />
     </AppShell>
+  )
+}
+
+function SyncBadge({ sync }) {
+  // Pure local mode (no Supabase configured).
+  if (!sync) {
+    return (
+      <Badge variant="light" color="gray" title="Stored on this device only — add Supabase keys to sync">
+        Local
+      </Badge>
+    )
+  }
+  // Down = browser offline, or Supabase unreachable (outage).
+  const down = !sync.online || !sync.reachable
+  if (sync.pending > 0) {
+    return (
+      <Badge
+        variant="light"
+        color={down ? 'orange' : 'amber'}
+        title={`${sync.pending} change${sync.pending === 1 ? '' : 's'} saved locally, will sync when Supabase is reachable`}
+      >
+        {down ? 'Offline' : 'Syncing…'} · {sync.pending}
+      </Badge>
+    )
+  }
+  if (down) {
+    return (
+      <Badge
+        variant="light"
+        color="orange"
+        title={
+          sync.online
+            ? 'Supabase unreachable — working from your local copy, will reconnect automatically'
+            : 'Offline — changes are saved locally'
+        }
+      >
+        {sync.online ? 'Reconnecting…' : 'Offline'}
+      </Badge>
+    )
+  }
+  return (
+    <Badge variant="light" color="teal" title="Synced across your devices">
+      Synced
+    </Badge>
   )
 }
 
