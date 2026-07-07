@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb300"/>
+      <stop offset="1" stop-color="#ff8f00"/>
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed background (safe for maskable icons) -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- Glyph kept within the central safe zone -->
+  <g fill="none" stroke="#1f1300" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Plate -->
+    <circle cx="256" cy="256" r="104"/>
+    <circle cx="256" cy="256" r="72"/>
+    <!-- Fork -->
+    <g>
+      <line x1="150" y1="150" x2="150" y2="256"/>
+      <line x1="132" y1="150" x2="132" y2="196"/>
+      <line x1="168" y1="150" x2="168" y2="196"/>
+      <path d="M132 196 q18 18 36 0"/>
+    </g>
+    <!-- Knife: straight spine + curved blade belly -->
+    <line x1="366" y1="150" x2="366" y2="362"/>
+    <path d="M366 150 q24 8 24 48 q0 28 -24 30"/>
+  </g>
+</svg>
