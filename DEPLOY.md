@@ -34,13 +34,34 @@ netlify deploy --build --prod
 This runs `npm run build` (in Netlify's cloud, using the env vars above) and
 publishes `dist`.
 
-## Continuous deploys from GitHub (later)
+## Continuous deploys from GitHub
 
-Once the repo is on GitHub, connect it in the Netlify UI (Site config → Build &
-deploy → Link repository). Build command `npm run build`, publish dir `dist` —
-already declared in `netlify.toml`. Every push to the default branch then
-deploys automatically. Remember to add the two env vars to the site if the
-site was created fresh from GitHub rather than linked from this folder.
+Repo: <https://github.com/Nineafterten/dinner-menu-app> · Site: `dinner-menu-app`.
+
+One-time link (needs your GitHub OAuth, so it's a UI step):
+
+1. Netlify → **dinner-menu-app** site → **Site configuration → Build & deploy →
+   Continuous deployment**.
+2. **Link repository** → authorize GitHub → pick `Nineafterten/dinner-menu-app`.
+3. Netlify reads `netlify.toml` (build `npm run build`, publish `dist`, Node 22)
+   — accept the defaults. Env vars are already set on the site.
+
+After that, every push to `main` builds and deploys automatically. (Builds take
+~5s; the 300 free build-minutes/month is effectively unreachable for this app.)
+
+### Kill switch (build-usage peace of mind)
+
+Same page — **Build & deploy → Continuous deployment**:
+
+- **Stop builds** — pauses all automatic builds. Pushes to GitHub no longer
+  trigger deploys and consume **zero** build minutes. The current live site
+  stays up untouched. Re-enable anytime. This is the main kill switch.
+- **Locked publish / "Stop auto publishing"** (Deploys tab) — builds still run
+  but nothing goes live until you manually publish.
+- Manual deploys still work regardless via `netlify deploy --build --prod`.
+
+Check usage anytime: Netlify → **Team → Usage** (build minutes, bandwidth).
+Free tier: 300 build min/month, 100 GB bandwidth/month.
 
 ## Notes
 
