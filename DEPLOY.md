@@ -3,6 +3,10 @@
 Static Vite app hosted on **Netlify** (Nineafterten team). No serverless
 functions — the browser talks to Supabase directly.
 
+- **Live:** <https://home-dinner-menu.netlify.app>
+- **Netlify site:** `home-dinner-menu`
+- **GitHub repo:** <https://github.com/Nineafterten/dinner-menu-app> (name intentionally differs from the site)
+
 ## Required environment variables
 
 Set these on the Netlify **site** (Site config → Environment variables) so the
@@ -36,11 +40,11 @@ publishes `dist`.
 
 ## Continuous deploys from GitHub
 
-Repo: <https://github.com/Nineafterten/dinner-menu-app> · Site: `dinner-menu-app`.
+Repo: <https://github.com/Nineafterten/dinner-menu-app> · Site: `home-dinner-menu`.
 
 One-time link (needs your GitHub OAuth, so it's a UI step):
 
-1. Netlify → **dinner-menu-app** site → **Site configuration → Build & deploy →
+1. Netlify → **home-dinner-menu** site → **Site configuration → Build & deploy →
    Continuous deployment**.
 2. **Link repository** → authorize GitHub → pick `Nineafterten/dinner-menu-app`.
 3. Netlify reads `netlify.toml` (build `npm run build`, publish `dist`, Node 22)
