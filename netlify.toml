@@ -1,0 +1,28 @@
+# Netlify deploy config. Static / client-only app — no serverless functions
+# (Supabase is called directly from the browser). See DEPLOY.md.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Match the local toolchain.
+  NODE_VERSION = "22"
+
+# SPA fallback: serve index.html for any path so deep links / refreshes work.
+# Netlify serves real static files (sw.js, manifest, icons, assets) first, so
+# this never shadows the PWA files.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Never cache the service worker itself, so updates roll out promptly.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
