@@ -7,9 +7,8 @@ make this right now." Works on laptop, phone, and iPad.
 ## Stack
 
 - **React + Vite + Mantine** (dark, warm/amber theme)
-- **Supabase** (hosted Postgres + realtime) for multi-device sync
-- Falls back to **localStorage** when Supabase isn't configured, so it runs
-  immediately on a single device.
+- **localStorage** on each device. The live site has no Supabase project behind it: that
+  project was deleted on 28 Sep 2026, and the sync code below is due to come out.
 
 ## Run locally
 
@@ -21,7 +20,10 @@ npm run dev
 The header shows a **Local** or **Synced** badge so you always know which
 backend is active.
 
-## Turn on multi-device sync (Supabase)
+## Multi-device sync (Supabase, retired)
+
+These steps describe the sync code still in `src/`. No project is configured, so the live
+site always shows **Local**.
 
 1. Create a free project at [supabase.com](https://supabase.com).
 2. In the dashboard, open **SQL Editor** and run [`supabase/schema.sql`](supabase/schema.sql).
