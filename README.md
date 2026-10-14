@@ -41,5 +41,5 @@ backend is active.
 
 ## Deploy
 
-Static build (`npm run build`) → any free static host (Vercel/Netlify). Set the
-two `VITE_SUPABASE_*` env vars in the host's dashboard.
+Live at <https://dinner-menu.nineafterten.com>, built and served by Cloudflare from GitHub on
+every push to `main`. See [`DEPLOY.md`](DEPLOY.md).

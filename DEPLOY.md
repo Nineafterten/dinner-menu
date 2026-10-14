@@ -1,75 +1,40 @@
 # Deploying Dinner Menu
 
-Static Vite app hosted on **Netlify** (Nineafterten team). No serverless
-functions — the browser talks to Supabase directly.
+Static Vite app served by a Cloudflare Worker named `dinner-menu` at
+<https://dinner-menu.nineafterten.com>. Cloudflare builds it from GitHub on every push to
+`main`: build command `npm run build`, deploy command `npx wrangler deploy`.
+`wrangler.jsonc` serves `dist/` with a single-page-app fallback.
 
-- **Live:** <https://home-dinner-menu.netlify.app>
-- **Netlify site:** `home-dinner-menu`
-- **GitHub repo:** <https://github.com/Nineafterten/dinner-menu-app> (name intentionally differs from the site)
+- **GitHub repo:** <https://github.com/Nineafterten/dinner-menu> (renamed from
+  `dinner-menu-app` on 13 Oct 2026; GitHub redirects the old name)
 
-## Required environment variables
+## Data
 
-Set these on the Netlify **site** (Site config → Environment variables) so the
-cloud build can inline them. They're the same values as your local `.env`:
+No variables are set on the build, so `src/lib/supabase.js` creates no client and the app
+uses `localRepository`: each browser keeps its own menu, per address. The Supabase project
+was deleted on 28 Sep 2026; its code comes out in a later cleanup.
 
-| Variable                 | Value                                  |
-| ------------------------ | -------------------------------------- |
-| `VITE_SUPABASE_URL`      | `https://<your-ref>.supabase.co`       |
-| `VITE_SUPABASE_ANON_KEY` | your `sb_publishable_…` key            |
+## Service worker and manifest
 
-> Vite inlines `VITE_*` at build time, so a change requires a rebuild/redeploy.
-> The publishable key is safe to ship in client code; the **secret** key must
-> never be set here.
+The PWA service worker uses `autoUpdate`. `public/_headers` (copied into `dist/`) marks
+`sw.js` and `manifest.webmanifest` as non-cacheable, so new deploys are picked up promptly,
+and gives the manifest its `application/manifest+json` type. HTTPS on the custom domain is
+what makes the app installable ("Add to Home Screen").
 
-## First-time setup (CLI)
+## The old Netlify address
+
+`home-dinner-menu.netlify.app` only redirects. `netlify-redirect/` was deployed once with
+`netlify deploy --prod --no-build --dir netlify-redirect --site home-dinner-menu`:
+
+- `_redirects` sends every path to the new address. The rule isn't forced, so the file
+  below is served instead of redirected.
+- `sw.js` replaces the old service worker on that address: it clears the caches,
+  unregisters, and reloads open pages, so an app installed from the old address follows
+  the redirect instead of running a stale offline copy. Reinstall from the new address.
+
+## Local development
 
 ```bash
-netlify link            # or: netlify sites:create --name dinner-menu
-netlify env:set VITE_SUPABASE_URL "https://<your-ref>.supabase.co"
-netlify env:set VITE_SUPABASE_ANON_KEY "sb_publishable_…"
+npm run dev                          # Vite, with the service worker enabled
+npm run build && npx wrangler dev    # the production build as Cloudflare serves it
 ```
-
-## Deploy
-
-```bash
-netlify deploy --build --prod
-```
-
-This runs `npm run build` (in Netlify's cloud, using the env vars above) and
-publishes `dist`.
-
-## Continuous deploys from GitHub
-
-Repo: <https://github.com/Nineafterten/dinner-menu-app> · Site: `home-dinner-menu`.
-
-One-time link (needs your GitHub OAuth, so it's a UI step):
-
-1. Netlify → **home-dinner-menu** site → **Site configuration → Build & deploy →
-   Continuous deployment**.
-2. **Link repository** → authorize GitHub → pick `Nineafterten/dinner-menu-app`.
-3. Netlify reads `netlify.toml` (build `npm run build`, publish `dist`, Node 22)
-   — accept the defaults. Env vars are already set on the site.
-
-After that, every push to `main` builds and deploys automatically. (Builds take
-~5s; the 300 free build-minutes/month is effectively unreachable for this app.)
-
-### Kill switch (build-usage peace of mind)
-
-Same page — **Build & deploy → Continuous deployment**:
-
-- **Stop builds** — pauses all automatic builds. Pushes to GitHub no longer
-  trigger deploys and consume **zero** build minutes. The current live site
-  stays up untouched. Re-enable anytime. This is the main kill switch.
-- **Locked publish / "Stop auto publishing"** (Deploys tab) — builds still run
-  but nothing goes live until you manually publish.
-- Manual deploys still work regardless via `netlify deploy --build --prod`.
-
-Check usage anytime: Netlify → **Team → Usage** (build minutes, bandwidth).
-Free tier: 300 build min/month, 100 GB bandwidth/month.
-
-## Notes
-
-- **HTTPS is automatic** on Netlify — that's what makes the PWA installable
-  ("Add to Home Screen") and lets the service worker run.
-- The service worker uses `autoUpdate`; `netlify.toml` marks `sw.js` and the
-  manifest as non-cacheable so new deploys are picked up promptly.
