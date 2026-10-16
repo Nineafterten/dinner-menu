@@ -3,7 +3,6 @@ import {
   Affix,
   Alert,
   AppShell,
-  Badge,
   Button,
   Center,
   Chip,
@@ -19,14 +18,15 @@ import {
   Title,
 } from '@mantine/core'
 import { useMeals } from './hooks/useMeals'
-import { useSyncStatus } from './hooks/useSyncStatus'
+import { exportToFile, importFromFile, restorePublished } from './data/menuFile'
 import { CATEGORIES } from './lib/categories'
 import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
+import { MenuFilePanel } from './components/MenuFilePanel'
 
 export default function App() {
-  const { meals, loading, error, createMeal, updateMeal, removeMeal } = useMeals()
-  const sync = useSyncStatus()
+  const { meals, publishedAt, loading, error, createMeal, updateMeal, removeMeal } =
+    useMeals()
 
   const [editMode, setEditMode] = useState(false)
   const [query, setQuery] = useState('')
@@ -35,6 +35,7 @@ export default function App() {
 
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [notice, setNotice] = useState(null)
 
   // Only show category filters for categories that actually have meals.
   const usedCategories = useMemo(() => {
@@ -72,6 +73,32 @@ export default function App() {
     else await createMeal(payload)
   }
 
+  function handleExport() {
+    const count = exportToFile()
+    setNotice({ color: 'teal', message: `Exported ${mealCount(count)} to menu.json.` })
+  }
+
+  async function handleImport(file) {
+    if (!file) return
+    if (!window.confirm(`Replace this device's meals with ${file.name}?`)) return
+    try {
+      const count = await importFromFile(file)
+      setNotice({ color: 'teal', message: `Imported ${mealCount(count)}.` })
+    } catch (err) {
+      setNotice({ color: 'red', message: err.message })
+    }
+  }
+
+  async function handleRestore() {
+    if (!window.confirm("Replace this device's meals with the published menu?")) return
+    try {
+      const count = await restorePublished()
+      setNotice({ color: 'teal', message: `Loaded the published menu (${mealCount(count)}).` })
+    } catch (err) {
+      setNotice({ color: 'red', message: err.message })
+    }
+  }
+
   return (
     <AppShell header={{ height: 60 }} padding="md" className="app-shell">
       <AppShell.Header>
@@ -79,7 +106,6 @@ export default function App() {
           <Group gap="xs" wrap="nowrap">
             <Text fz={24}>🍽️</Text>
             <Title order={3}>Dinner Menu</Title>
-            <SyncBadge sync={sync} />
           </Group>
           <Switch
             checked={editMode}
@@ -97,6 +123,21 @@ export default function App() {
               <Alert color="red" title="Couldn't load meals">
                 {String(error.message || error)}
               </Alert>
+            )}
+
+            {notice && (
+              <Alert color={notice.color} withCloseButton onClose={() => setNotice(null)}>
+                {notice.message}
+              </Alert>
+            )}
+
+            {editMode && (
+              <MenuFilePanel
+                publishedAt={publishedAt}
+                onExport={handleExport}
+                onImport={handleImport}
+                onRestore={handleRestore}
+              />
             )}
 
             <Group justify="space-between" align="flex-end" wrap="wrap">
@@ -180,48 +221,8 @@ export default function App() {
   )
 }
 
-function SyncBadge({ sync }) {
-  // Pure local mode (no Supabase configured).
-  if (!sync) {
-    return (
-      <Badge variant="light" color="gray" title="Stored on this device only — add Supabase keys to sync">
-        Local
-      </Badge>
-    )
-  }
-  // Down = browser offline, or Supabase unreachable (outage).
-  const down = !sync.online || !sync.reachable
-  if (sync.pending > 0) {
-    return (
-      <Badge
-        variant="light"
-        color={down ? 'orange' : 'amber'}
-        title={`${sync.pending} change${sync.pending === 1 ? '' : 's'} saved locally, will sync when Supabase is reachable`}
-      >
-        {down ? 'Offline' : 'Syncing…'} · {sync.pending}
-      </Badge>
-    )
-  }
-  if (down) {
-    return (
-      <Badge
-        variant="light"
-        color="orange"
-        title={
-          sync.online
-            ? 'Supabase unreachable — working from your local copy, will reconnect automatically'
-            : 'Offline — changes are saved locally'
-        }
-      >
-        {sync.online ? 'Reconnecting…' : 'Offline'}
-      </Badge>
-    )
-  }
-  return (
-    <Badge variant="light" color="teal" title="Synced across your devices">
-      Synced
-    </Badge>
-  )
+function mealCount(count) {
+  return `${count} meal${count === 1 ? '' : 's'}`
 }
 
 function EmptyState({ hasMeals, editMode, onAdd }) {

@@ -1,6 +1,4 @@
-// Pure localStorage repository — used when Supabase env vars aren't set at all.
-// Single device, no sync, no queue. Shares the same cache store as the offline
-// repository so data carries over if you later add Supabase keys.
+// localStorage repository: each device keeps its own copy of the menu.
 import {
   CHANGE_EVENT,
   newId,

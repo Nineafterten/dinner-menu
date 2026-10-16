@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
-import { repository } from '../data/repository'
+import { hasCache } from '../data/cache'
+import { localRepository } from '../data/localRepository'
+import { getAdoptedAt, syncPublished } from '../data/menuFile'
 
-// Loads meals, keeps them in sync (realtime via Supabase, or same-tab/cross-tab
-// events via localStorage), and exposes CRUD helpers.
+// Loads meals, picks up a newer published menu.json, keeps same-tab/cross-tab
+// changes in sync via localStorage events, and exposes CRUD helpers.
 export function useMeals() {
   const [meals, setMeals] = useState([])
+  const [publishedAt, setPublishedAt] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   const reload = useCallback(async () => {
     try {
-      const data = await repository.list()
+      const data = await localRepository.list()
       setMeals(data)
+      setPublishedAt(getAdoptedAt())
       setError(null)
     } catch (err) {
       setError(err)
@@ -21,14 +25,15 @@ export function useMeals() {
   }, [])
 
   useEffect(() => {
-    reload()
-    const unsubscribe = repository.subscribe(reload)
-    return unsubscribe
+    // A first visit waits for menu.json instead of flashing an empty menu.
+    if (hasCache()) reload()
+    syncPublished().finally(reload)
+    return localRepository.subscribe(reload)
   }, [reload])
 
   const createMeal = useCallback(
     async (meal) => {
-      await repository.create(meal)
+      await localRepository.create(meal)
       await reload()
     },
     [reload]
@@ -38,7 +43,7 @@ export function useMeals() {
     async (id, patch) => {
       // Optimistic: reflect the change immediately, then confirm.
       setMeals((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)))
-      await repository.update(id, patch)
+      await localRepository.update(id, patch)
       await reload()
     },
     [reload]
@@ -46,11 +51,11 @@ export function useMeals() {
 
   const removeMeal = useCallback(
     async (id) => {
-      await repository.remove(id)
+      await localRepository.remove(id)
       await reload()
     },
     [reload]
   )
 
-  return { meals, loading, error, createMeal, updateMeal, removeMeal }
+  return { meals, publishedAt, loading, error, createMeal, updateMeal, removeMeal }
 }

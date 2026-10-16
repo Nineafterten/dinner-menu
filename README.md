@@ -7,8 +7,8 @@ make this right now." Works on laptop, phone, and iPad.
 ## Stack
 
 - **React + Vite + Mantine** (dark, warm/amber theme)
-- **localStorage** on each device. The live site has no Supabase project behind it: that
-  project was deleted on 28 Sep 2026, and the sync code below is due to come out.
+- **localStorage** on each device, seeded from **`public/menu.json`**, which ships with the
+  site. There is no backend.
 
 ## Run locally
 
@@ -17,19 +17,19 @@ npm install
 npm run dev
 ```
 
-The header shows a **Local** or **Synced** badge so you always know which
-backend is active.
+## Publishing the menu
 
-## Multi-device sync (Supabase, retired)
+Every device shows the menu published with the site, `public/menu.json`. To change it:
 
-These steps describe the sync code still in `src/`. No project is configured, so the live
-site always shows **Local**.
+1. Turn on **Edit mode** and make your changes.
+2. Choose **Export menu.json** in the *Publish the menu* panel.
+3. Replace `public/menu.json` in the repo with the exported file, commit, and push. The
+   site redeploys in about a minute.
 
-1. Create a free project at [supabase.com](https://supabase.com).
-2. In the dashboard, open **SQL Editor** and run [`supabase/schema.sql`](supabase/schema.sql).
-3. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL` and
-   `VITE_SUPABASE_ANON_KEY` (Settings → API).
-4. Restart `npm run dev`. The badge should now read **Synced**.
+A device picks up a newly published menu when it has no meals yet, or when it follows the
+published menu and nothing on it has changed since that menu was exported. A device keeps
+its own copy instead when it already had meals before `menu.json` existed, or after
+**Import a file…**. **Use the published menu** puts it back on the published one.
 
 ## How it works
 
@@ -38,8 +38,8 @@ site always shows **Local**.
   devices. Everyone else sees a clean read-only menu.
 - **Data model:** name, optional category (emoji icon), ingredients (one per
   line), prep/cook notes, and the `ready` boolean.
-- The data layer lives in [`src/data/`](src/data): `repository.js` picks
-  `supabaseRepository` or `localRepository` — everything else is backend-agnostic.
+- The data layer lives in [`src/data/`](src/data): `localRepository.js` reads and writes
+  this device's copy, and `menuFile.js` handles export, import, and `menu.json`.
 
 ## Deploy
 

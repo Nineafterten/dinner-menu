@@ -10,9 +10,10 @@ Static Vite app served by a Cloudflare Worker named `dinner-menu` at
 
 ## Data
 
-No variables are set on the build, so `src/lib/supabase.js` creates no client and the app
-uses `localRepository`: each browser keeps its own menu, per address. The Supabase project
-was deleted on 28 Sep 2026; its code comes out in a later cleanup.
+There is no backend and no build variables. Each browser keeps its menu in localStorage and
+takes the published menu from `public/menu.json`, served at `/menu.json` (see the README's
+*Publishing the menu*). `public/_headers` marks it non-cacheable so a republish shows up on
+the next load. The service worker doesn't precache it, so offline devices keep their copy.
 
 ## Service worker and manifest
 

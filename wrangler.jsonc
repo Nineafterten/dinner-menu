@@ -1,5 +1,5 @@
 // Serves the Vite build in dist/ as static assets. Cloudflare builds it from
-// GitHub with no Supabase variables, so the app runs on-device only.
+// GitHub; the app runs on-device, with the menu published as /menu.json.
 {
   "name": "dinner-menu",
   "compatibility_date": "2026-09-15",
