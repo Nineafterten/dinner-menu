@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import {
   Affix,
   Alert,
@@ -18,11 +18,13 @@ import {
   Title,
 } from '@mantine/core'
 import { useMeals } from './hooks/useMeals'
+import { useFlip } from './hooks/useFlip'
 import { exportToFile, importFromFile, restorePublished } from './data/menuFile'
 import { CATEGORIES } from './lib/categories'
 import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
 import { MenuFilePanel } from './components/MenuFilePanel'
+import { PickDinnerModal } from './components/PickDinnerModal'
 
 export default function App() {
   const { meals, publishedAt, loading, error, createMeal, updateMeal, removeMeal } =
@@ -36,6 +38,10 @@ export default function App() {
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(null)
   const [notice, setNotice] = useState(null)
+  const [picked, setPicked] = useState(null)
+
+  const gridRef = useRef(null)
+  const captureLayout = useFlip(gridRef)
 
   // Only show category filters for categories that actually have meals.
   const usedCategories = useMemo(() => {
@@ -45,7 +51,7 @@ export default function App() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return meals.filter((m) => {
+    const matches = meals.filter((m) => {
       if (readyOnly && !m.ready) return false
       if (category !== 'all' && m.category !== category) return false
       if (!q) return true
@@ -54,9 +60,20 @@ export default function App() {
         .toLowerCase()
       return haystack.includes(q)
     })
+    // Ready meals first; the repository already sorts by name, and sort is stable.
+    return [...matches].sort((a, b) => Number(Boolean(b.ready)) - Number(Boolean(a.ready)))
   }, [meals, query, category, readyOnly])
 
   const readyCount = useMemo(() => meals.filter((m) => m.ready).length, [meals])
+
+  // "Pick for me" chooses among the ready meals that match the current filters.
+  const pickPool = useMemo(() => filtered.filter((m) => m.ready), [filtered])
+
+  function pickDinner() {
+    const choices =
+      picked && pickPool.length > 1 ? pickPool.filter((m) => m.id !== picked.id) : pickPool
+    setPicked(choices[Math.floor(Math.random() * choices.length)] || null)
+  }
 
   function openAdd() {
     setEditing(null)
@@ -117,7 +134,7 @@ export default function App() {
       </AppShell.Header>
 
       <AppShell.Main>
-        <Container size="lg" px={0}>
+        <Container size="lg" px={0} className="menu-body">
           <Stack>
             {error && (
               <Alert color="red" title="Couldn't load meals">
@@ -140,19 +157,21 @@ export default function App() {
               />
             )}
 
-            <Group justify="space-between" align="flex-end" wrap="wrap">
+            <Group justify="space-between" wrap="nowrap" gap="sm">
               <TextInput
-                placeholder="Search meals, ingredients, notes…"
+                placeholder="Meal or ingredient…"
+                aria-label="Search meals"
                 value={query}
                 onChange={(e) => setQuery(e.currentTarget.value)}
-                w={{ base: '100%', sm: 320 }}
+                flex={1}
+                maw={{ sm: 360 }}
                 leftSection={<span>🔎</span>}
               />
               <Switch
                 checked={readyOnly}
                 onChange={(e) => setReadyOnly(e.currentTarget.checked)}
                 label={`Ready now${readyCount ? ` (${readyCount})` : ''}`}
-                color="amber"
+                color="herb"
               />
             </Group>
 
@@ -162,7 +181,7 @@ export default function App() {
                 value={category}
                 onChange={setCategory}
               >
-                <Group gap="xs">
+                <Group gap="xs" className="chip-row">
                   <Chip value="all" variant="light">
                     All
                   </Chip>
@@ -177,7 +196,7 @@ export default function App() {
 
             {loading ? (
               <Center py="xl">
-                <Loader color="amber" />
+                <Loader />
               </Center>
             ) : filtered.length === 0 ? (
               <EmptyState
@@ -186,13 +205,21 @@ export default function App() {
                 onAdd={openAdd}
               />
             ) : (
-              <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+              <SimpleGrid
+                ref={gridRef}
+                cols={{ base: 1, sm: 2, lg: 3 }}
+                spacing="sm"
+                className="meal-grid"
+              >
                 {filtered.map((meal) => (
                   <MealCard
                     key={meal.id}
                     meal={meal}
                     editMode={editMode}
-                    onToggleReady={(id, ready) => updateMeal(id, { ready })}
+                    onToggleReady={(id, ready) => {
+                      captureLayout()
+                      updateMeal(id, { ready })
+                    }}
                     onEdit={openEdit}
                   />
                 ))}
@@ -202,13 +229,28 @@ export default function App() {
         </Container>
       </AppShell.Main>
 
-      {editMode && (
-        <Affix position={{ bottom: 24, right: 24 }}>
+      {editMode ? (
+        <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
           <Button size="md" radius="xl" onClick={openAdd}>
             + Add meal
           </Button>
         </Affix>
+      ) : (
+        pickPool.length > 0 && (
+          <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
+            <Button size="md" radius="xl" onClick={pickDinner}>
+              🎲 Pick for me
+            </Button>
+          </Affix>
+        )
       )}
+
+      <PickDinnerModal
+        meal={picked}
+        poolSize={pickPool.length}
+        onPickAgain={pickDinner}
+        onClose={() => setPicked(null)}
+      />
 
       <MealForm
         opened={formOpen}

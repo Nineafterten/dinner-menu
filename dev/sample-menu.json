@@ -1,0 +1,411 @@
+{
+  "app": "dinner-menu",
+  "version": 1,
+  "exportedAt": "2026-10-15T00:00:00.000Z",
+  "meals": [
+    {
+      "id": "14e63f50-eccd-5bb0-8224-e5ae01f281ec",
+      "name": "Sheet-pan chicken thighs with potatoes",
+      "category": "chicken",
+      "ingredients": [
+        "chicken thighs",
+        "baby potatoes",
+        "olive oil",
+        "rosemary",
+        "garlic",
+        "lemon"
+      ],
+      "notes": "425\u00b0F for 35 min, flip the potatoes halfway. Skin side up the whole time.",
+      "ready": true,
+      "created_at": "2026-10-01T18:00:00.000Z",
+      "updated_at": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "7638ebfb-23d3-56df-bfe0-1ebee61e933c",
+      "name": "Chicken tortilla soup",
+      "category": "soup",
+      "ingredients": [
+        "chicken breast",
+        "black beans",
+        "fire-roasted tomatoes",
+        "onion",
+        "chicken stock",
+        "corn",
+        "tortilla chips",
+        "lime"
+      ],
+      "notes": "Simmer 25 min, shred the chicken with two forks, then back in. Chips and lime at the table.",
+      "ready": false,
+      "created_at": "2026-10-02T18:01:00.000Z",
+      "updated_at": "2026-10-02T18:01:00.000Z"
+    },
+    {
+      "id": "550de34a-f12e-5c72-a118-de143cbe2472",
+      "name": "Teriyaki chicken rice bowls",
+      "category": "chicken",
+      "ingredients": [
+        "chicken thighs",
+        "teriyaki sauce",
+        "rice",
+        "broccoli",
+        "green onion",
+        "sesame seeds"
+      ],
+      "notes": "",
+      "ready": true,
+      "created_at": "2026-10-03T18:02:00.000Z",
+      "updated_at": "2026-10-03T18:02:00.000Z"
+    },
+    {
+      "id": "0ccdbde7-942b-58a7-9031-092f0afd0bb3",
+      "name": "Smash burgers",
+      "category": "beef",
+      "ingredients": [
+        "ground beef 80/20",
+        "burger buns",
+        "American cheese",
+        "pickles",
+        "onion",
+        "burger sauce"
+      ],
+      "notes": "Cast iron ripping hot. 2 oz balls, smash hard, 90 s, flip, cheese, 30 s.",
+      "ready": true,
+      "created_at": "2026-10-04T18:03:00.000Z",
+      "updated_at": "2026-10-04T18:03:00.000Z"
+    },
+    {
+      "id": "0e9aa03a-1c1a-557b-919c-16f96e81b586",
+      "name": "Slow-cooker beef chili",
+      "category": "soup",
+      "ingredients": [
+        "ground beef",
+        "kidney beans",
+        "pinto beans",
+        "crushed tomatoes",
+        "onion",
+        "chili powder",
+        "cumin",
+        "cornbread mix"
+      ],
+      "notes": "Brown the beef first. Low 8 h or high 4 h. Cornbread at 400\u00b0F for 20 min while it finishes.",
+      "ready": false,
+      "created_at": "2026-10-05T18:04:00.000Z",
+      "updated_at": "2026-10-05T18:04:00.000Z"
+    },
+    {
+      "id": "958c5acc-883c-5bf6-a060-5d862885d860",
+      "name": "Beef and broccoli",
+      "category": "beef",
+      "ingredients": [
+        "flank steak",
+        "broccoli",
+        "soy sauce",
+        "brown sugar",
+        "garlic",
+        "ginger",
+        "cornstarch",
+        "rice"
+      ],
+      "notes": "Slice the steak thin against the grain; partly frozen makes it easier.",
+      "ready": false,
+      "created_at": "2026-10-06T18:05:00.000Z",
+      "updated_at": "2026-10-06T18:05:00.000Z"
+    },
+    {
+      "id": "9282b61f-7364-504b-961e-8db170f417ec",
+      "name": "Pork carnitas tacos",
+      "category": "pork",
+      "ingredients": [
+        "pork shoulder",
+        "orange",
+        "lime",
+        "cumin",
+        "oregano",
+        "corn tortillas",
+        "cilantro",
+        "white onion"
+      ],
+      "notes": "Slow cooker 8 h, shred, then broil on a sheet pan 5 min for crispy edges.",
+      "ready": false,
+      "created_at": "2026-10-07T18:06:00.000Z",
+      "updated_at": "2026-10-07T18:06:00.000Z"
+    },
+    {
+      "id": "f2a2d5cd-b1da-5dd0-b244-7903a1e9a394",
+      "name": "Pork chops with applesauce",
+      "category": "pork",
+      "ingredients": [
+        "bone-in pork chops",
+        "applesauce",
+        "green beans",
+        "butter"
+      ],
+      "notes": "Pull at 140\u00b0F and rest 5 min.",
+      "ready": true,
+      "created_at": "2026-10-08T18:07:00.000Z",
+      "updated_at": "2026-10-08T18:07:00.000Z"
+    },
+    {
+      "id": "f3aaf191-901b-51fd-9b68-3c4a31aece35",
+      "name": "Breakfast burritos",
+      "category": "breakfast",
+      "ingredients": [
+        "eggs",
+        "breakfast sausage",
+        "hash browns",
+        "cheddar",
+        "large flour tortillas",
+        "salsa"
+      ],
+      "notes": "Make a double batch and freeze half in foil.",
+      "ready": true,
+      "created_at": "2026-10-09T18:08:00.000Z",
+      "updated_at": "2026-10-09T18:08:00.000Z"
+    },
+    {
+      "id": "9c0b8b6d-eb9c-5a3a-a630-af6c66a744b6",
+      "name": "Pancakes and bacon",
+      "category": "breakfast",
+      "ingredients": [
+        "pancake mix",
+        "eggs",
+        "milk",
+        "bacon",
+        "maple syrup",
+        "blueberries"
+      ],
+      "notes": "Bacon in the oven at 400\u00b0F, 18 min, while the pancakes go.",
+      "ready": true,
+      "created_at": "2026-10-10T18:09:00.000Z",
+      "updated_at": "2026-10-10T18:09:00.000Z"
+    },
+    {
+      "id": "b4ef0667-839e-5d38-bc5f-83827807b01d",
+      "name": "Salmon with roasted asparagus",
+      "category": "seafood",
+      "ingredients": [
+        "salmon fillets",
+        "asparagus",
+        "lemon",
+        "dill",
+        "olive oil"
+      ],
+      "notes": "400\u00b0F for 12\u201315 min on one pan.",
+      "ready": false,
+      "created_at": "2026-10-11T18:10:00.000Z",
+      "updated_at": "2026-10-11T18:10:00.000Z"
+    },
+    {
+      "id": "497721af-af47-5ec0-ac9e-b31ed97e089b",
+      "name": "Shrimp scampi",
+      "category": "seafood",
+      "ingredients": [
+        "shrimp",
+        "linguine",
+        "butter",
+        "garlic",
+        "white wine",
+        "lemon",
+        "parsley",
+        "red pepper flakes"
+      ],
+      "notes": "Shrimp go in last, 2 min a side. Save a cup of pasta water.",
+      "ready": false,
+      "created_at": "2026-10-12T18:11:00.000Z",
+      "updated_at": "2026-10-12T18:11:00.000Z"
+    },
+    {
+      "id": "5d264511-9f83-5ffc-9ae5-64ce633b685d",
+      "name": "Fish tacos with lime slaw",
+      "category": "seafood",
+      "ingredients": [
+        "cod",
+        "flour tortillas",
+        "cabbage",
+        "lime",
+        "sour cream",
+        "chipotle in adobo"
+      ],
+      "notes": "",
+      "ready": false,
+      "created_at": "2026-10-13T18:12:00.000Z",
+      "updated_at": "2026-10-13T18:12:00.000Z"
+    },
+    {
+      "id": "175e8fc8-6f8d-5649-b9c6-a0c1cbe96809",
+      "name": "Spaghetti and meatballs",
+      "category": "pasta",
+      "ingredients": [
+        "spaghetti",
+        "frozen meatballs",
+        "marinara",
+        "parmesan",
+        "garlic bread"
+      ],
+      "notes": "",
+      "ready": true,
+      "created_at": "2026-10-14T18:13:00.000Z",
+      "updated_at": "2026-10-14T18:13:00.000Z"
+    },
+    {
+      "id": "09b98dd3-3579-5fd1-9f1d-70e6c7448e4c",
+      "name": "Baked ziti",
+      "category": "pasta",
+      "ingredients": [
+        "ziti",
+        "ricotta",
+        "mozzarella",
+        "marinara",
+        "Italian sausage",
+        "parmesan"
+      ],
+      "notes": "Assemble the night before; 375\u00b0F covered 25 min, uncovered 15.",
+      "ready": false,
+      "created_at": "2026-10-01T18:14:00.000Z",
+      "updated_at": "2026-10-01T18:14:00.000Z"
+    },
+    {
+      "id": "e4bd8f61-d345-5e35-9e04-8fa3a9f7cc5f",
+      "name": "One-pot creamy Cajun sausage pasta with spinach, sun-dried tomatoes and a lot of parmesan",
+      "category": "pasta",
+      "ingredients": [
+        "penne",
+        "andouille sausage",
+        "heavy cream",
+        "chicken stock",
+        "spinach",
+        "sun-dried tomatoes",
+        "Cajun seasoning",
+        "parmesan"
+      ],
+      "notes": "Everything goes in one pot. Pasta cooks in the stock and cream, about 12 min, stirring so it doesn't stick. Spinach right at the end. Kids will eat it if it's not too spicy, so go light on the Cajun and put hot sauce on the table.",
+      "ready": false,
+      "created_at": "2026-10-02T18:15:00.000Z",
+      "updated_at": "2026-10-02T18:15:00.000Z"
+    },
+    {
+      "id": "36cf1ad6-9881-5600-bb9b-ea8dd15a9ab2",
+      "name": "Black bean quesadillas",
+      "category": "veggie",
+      "ingredients": [
+        "flour tortillas",
+        "black beans",
+        "cheddar",
+        "corn",
+        "salsa",
+        "sour cream"
+      ],
+      "notes": "",
+      "ready": true,
+      "created_at": "2026-10-03T18:16:00.000Z",
+      "updated_at": "2026-10-03T18:16:00.000Z"
+    },
+    {
+      "id": "25b1d1b6-6f65-5240-ad3d-84db3be2efba",
+      "name": "Veggie stir-fry with tofu",
+      "category": "veggie",
+      "ingredients": [
+        "extra-firm tofu",
+        "bell peppers",
+        "snap peas",
+        "carrots",
+        "soy sauce",
+        "ginger",
+        "rice"
+      ],
+      "notes": "Press the tofu 20 min first, then cornstarch and pan-fry until golden.",
+      "ready": false,
+      "created_at": "2026-10-04T18:17:00.000Z",
+      "updated_at": "2026-10-04T18:17:00.000Z"
+    },
+    {
+      "id": "55e23c77-83ea-5f3f-b775-eccda1886f26",
+      "name": "Caprese pasta salad",
+      "category": "salad",
+      "ingredients": [
+        "rotini",
+        "cherry tomatoes",
+        "fresh mozzarella",
+        "basil",
+        "balsamic glaze",
+        "olive oil"
+      ],
+      "notes": "Better after an hour in the fridge.",
+      "ready": false,
+      "created_at": "2026-10-05T18:18:00.000Z",
+      "updated_at": "2026-10-05T18:18:00.000Z"
+    },
+    {
+      "id": "74869022-bc09-52a0-84e7-43f277e31417",
+      "name": "Chicken Caesar salad",
+      "category": "salad",
+      "ingredients": [
+        "romaine",
+        "rotisserie chicken",
+        "croutons",
+        "parmesan",
+        "Caesar dressing"
+      ],
+      "notes": "Rotisserie chicken makes this a ten-minute dinner.",
+      "ready": true,
+      "created_at": "2026-10-06T18:19:00.000Z",
+      "updated_at": "2026-10-06T18:19:00.000Z"
+    },
+    {
+      "id": "bd4f5fed-ef59-59c6-be58-5367e77c1ee5",
+      "name": "Homemade pizza night",
+      "category": "other",
+      "ingredients": [
+        "pizza dough",
+        "pizza sauce",
+        "mozzarella",
+        "pepperoni",
+        "whatever's in the fridge"
+      ],
+      "notes": "Oven as hot as it goes with the pan inside. Everyone builds their own.",
+      "ready": false,
+      "created_at": "2026-10-07T18:20:00.000Z",
+      "updated_at": "2026-10-07T18:20:00.000Z"
+    },
+    {
+      "id": "8b1588d9-c640-5ea3-9e73-22a3dae063be",
+      "name": "Grilled cheese and tomato soup",
+      "category": "soup",
+      "ingredients": [
+        "sourdough",
+        "cheddar",
+        "butter",
+        "canned tomato soup"
+      ],
+      "notes": "",
+      "ready": true,
+      "created_at": "2026-10-08T18:21:00.000Z",
+      "updated_at": "2026-10-08T18:21:00.000Z"
+    },
+    {
+      "id": "10e06246-f635-59f6-8806-76275fcd096a",
+      "name": "Leftovers buffet",
+      "category": null,
+      "ingredients": [],
+      "notes": "Everything in the fridge, on the counter, in containers. Nobody complains.",
+      "ready": true,
+      "created_at": "2026-10-09T18:22:00.000Z",
+      "updated_at": "2026-10-09T18:22:00.000Z"
+    },
+    {
+      "id": "1a9c5229-55ab-57f3-a117-ff815cac88ed",
+      "name": "Sloppy joes",
+      "category": null,
+      "ingredients": [
+        "ground beef",
+        "sloppy joe sauce",
+        "hamburger buns",
+        "coleslaw"
+      ],
+      "notes": "",
+      "ready": false,
+      "created_at": "2026-10-10T18:23:00.000Z",
+      "updated_at": "2026-10-10T18:23:00.000Z"
+    }
+  ]
+}

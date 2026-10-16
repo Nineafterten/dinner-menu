@@ -17,6 +17,9 @@ npm install
 npm run dev
 ```
 
+`dev/sample-menu.json` holds 24 made-up meals for trying the UI. Load it with **Import a
+file…** in edit mode. It isn't published, so never copy it over `public/menu.json`.
+
 ## Publishing the menu
 
 Every device shows the menu published with the site, `public/menu.json`. To change it:
@@ -33,9 +36,12 @@ its own copy instead when it already had meals before `menu.json` existed, or af
 
 ## How it works
 
-- **Edit mode** (header switch) reveals the add/edit controls and the ready
-  toggles. It's a soft, no-auth convention — turn it on only on your own
-  devices. Everyone else sees a clean read-only menu.
+- **Edit mode** (header switch) reveals the add/edit controls and the publish panel.
+  It's a soft, no-auth convention — turn it on only on your own devices. The ready
+  switches work without it.
+- **Cards** show one line per meal; tap one for its ingredients and notes. Ready meals
+  sort first, and **Pick for me** chooses at random among the ready meals that match
+  the current filters.
 - **Data model:** name, optional category (emoji icon), ingredients (one per
   line), prep/cook notes, and the `ready` boolean.
 - The data layer lives in [`src/data/`](src/data): `localRepository.js` reads and writes

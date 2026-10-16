@@ -1,5 +1,33 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  --dm-paper: #f6f0e4;
+  --dm-surface: #fffaf2;
+  --dm-ink: #2a2420;
+  --dm-dim: #6f645a;
+  --dm-line: #e3d8c3;
+  --dm-ready: var(--mantine-color-herb-6);
+  --dm-switch-edge: #948670;
+  --dm-chip-bg: #f3e4b8;
+  --dm-chip-ink: #6b4f0e;
+}
+
+:root[data-mantine-color-scheme='light'] {
+  --mantine-color-body: var(--dm-paper);
+  --mantine-color-text: var(--dm-ink);
+  --mantine-color-dimmed: var(--dm-dim);
+  --mantine-color-default-border: var(--dm-line);
+}
+
+.mantine-Card-root,
+.mantine-Modal-content,
+.mantine-Modal-header,
+.mantine-TextInput-input {
+  background: var(--dm-surface);
+}
+
+.mantine-AppShell-header {
+  background: var(--dm-paper);
+  border-color: var(--dm-line);
 }
 
 html,
@@ -10,7 +38,7 @@ body,
 
 body {
   margin: 0;
-  background: #1a1206;
+  background: var(--dm-paper);
 }
 
 /* Respect device safe areas (iPhone notch / home indicator). */
@@ -18,4 +46,97 @@ body {
   padding-left: max(env(safe-area-inset-left), 0px);
   padding-right: max(env(safe-area-inset-right), 0px);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Meal cards: collapsed to one line, tap to expand. */
+.meal-card--ready {
+  border-color: var(--dm-ready);
+  box-shadow: inset 3px 0 0 var(--dm-ready);
+}
+
+.meal-card:not(.meal-card--ready) .mantine-Switch-label {
+  color: var(--mantine-color-dimmed);
+}
+
+.meal-card {
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+/* Collapsed cards are all two name-lines tall, so the grid's gutters stay even. */
+.meal-card__toggle {
+  flex: 1;
+  min-width: 0;
+  min-height: calc(2em * var(--mantine-line-height));
+}
+
+.meal-card__icon {
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.meal-card__notes {
+  white-space: pre-wrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  transition: transform 150ms ease;
+}
+
+.chevron--open {
+  transform: rotate(180deg);
+}
+
+.meal-grid {
+  position: relative;
+  align-items: start;
+}
+
+/* Phones: categories scroll sideways in one row instead of wrapping. */
+@media (max-width: 47.99em) {
+  .chip-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: calc(var(--mantine-spacing-md) * -1);
+    padding-inline: var(--mantine-spacing-md);
+  }
+
+  .chip-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip-row > * {
+    flex-shrink: 0;
+  }
+
+  .meal-card .mantine-Switch-label {
+    display: none;
+  }
+}
+
+/* Room for the floating button so it never covers the last card. */
+.menu-body {
+  padding-bottom: 88px;
+}
+
+/* Off switches need a visible edge on cream (3:1 against the card). */
+.mantine-Switch-input:not(:checked) + .mantine-Switch-track {
+  background: var(--dm-paper);
+  border-color: var(--dm-switch-edge);
+}
+
+/* Category chips: a soft mustard tag; the selected one is solid tomato. */
+.chip-row .mantine-Chip-label {
+  background: var(--dm-chip-bg);
+  color: var(--dm-chip-ink);
+}
+
+.chip-row .mantine-Chip-label[data-checked] {
+  background: var(--mantine-color-tomato-6);
+  color: var(--dm-surface);
+}
+
+.chip-row .mantine-Chip-label[data-checked] .mantine-Chip-iconWrapper {
+  color: var(--dm-surface);
 }
