@@ -4,19 +4,19 @@ import {
   Card,
   Collapse,
   Group,
-  List,
   Stack,
   Switch,
   Text,
   UnstyledButton,
 } from '@mantine/core'
 import { categoryMeta } from '../lib/categories'
+import { Ingredients, hasIngredients } from './Ingredients'
 
 export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
   const cat = categoryMeta(meal.category)
   const [open, setOpen] = useState(false)
   const detailsId = useId()
-  const hasDetails = Boolean(cat || meal.ingredients?.length || meal.notes)
+  const hasDetails = Boolean(cat || hasIngredients(meal) || meal.notes)
 
   return (
     <Card
@@ -80,13 +80,7 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
             </Text>
           )}
 
-          {meal.ingredients?.length > 0 && (
-            <List size="sm" spacing={2} c="dimmed">
-              {meal.ingredients.map((ing, i) => (
-                <List.Item key={i}>{ing}</List.Item>
-              ))}
-            </List>
-          )}
+          <Ingredients meal={meal} />
 
           {meal.notes && (
             <Text size="sm" c="dimmed" className="meal-card__notes">

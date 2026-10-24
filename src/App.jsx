@@ -55,7 +55,7 @@ export default function App() {
       if (readyOnly && !m.ready) return false
       if (category !== 'all' && m.category !== category) return false
       if (!q) return true
-      const haystack = [m.name, m.notes, ...(m.ingredients || [])]
+      const haystack = [m.name, m.notes, ...(m.ingredients || []), ...(m.optionalIngredients || [])]
         .join(' ')
         .toLowerCase()
       return haystack.includes(q)

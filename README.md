@@ -42,8 +42,12 @@ its own copy instead when it already had meals before `menu.json` existed, or af
 - **Cards** show one line per meal; tap one for its ingredients and notes. Ready meals
   sort first, and **Pick for me** chooses at random among the ready meals that match
   the current filters.
-- **Data model:** name, optional category (emoji icon), ingredients (one per
-  line), prep/cook notes, and the `ready` boolean.
+- **Data model:** name, optional category (emoji icon), the ingredients a meal
+  needs, `optionalIngredients` (nice to have; absent on older meals), prep/cook
+  notes, and the `ready` boolean.
+- **The add/edit form** is laid out like the menu entry it becomes. Enter starts the
+  next ingredient line, Backspace on an empty line removes it, and pasting several
+  lines splits them into rows.
 - The data layer lives in [`src/data/`](src/data): `localRepository.js` reads and writes
   this device's copy, and `menuFile.js` handles export, import, and `menu.json`.
 
