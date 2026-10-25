@@ -4,7 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/plate.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f6f0e4" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f0e4" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1814" />
+    <!-- Mantine's saved choice, applied before React loads so a dark page never flashes light. -->
+    <script>
+      (function () {
+        var saved
+        try { saved = localStorage.getItem('mantine-color-scheme-value') } catch (e) {}
+        var scheme = saved === 'light' || saved === 'dark' ? saved
+          : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-mantine-color-scheme', scheme)
+      })()
+    </script>
     <!-- iOS "Add to Home Screen" support -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

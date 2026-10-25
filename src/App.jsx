@@ -25,6 +25,7 @@ import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
 import { MenuFilePanel } from './components/MenuFilePanel'
 import { PickDinnerModal } from './components/PickDinnerModal'
+import { ThemeToggle } from './components/ThemeToggle'
 
 export default function App() {
   const { meals, publishedAt, loading, error, createMeal, updateMeal, removeMeal } =
@@ -121,15 +122,18 @@ export default function App() {
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between" wrap="nowrap">
           <Group gap="xs" wrap="nowrap">
-            <Text fz={24}>🍽️</Text>
-            <Title order={3}>Dinner Menu</Title>
+            <Text fz={24} className="app-logo" aria-hidden>🍽️</Text>
+            <Title order={3} className="app-title">Dinner Menu</Title>
           </Group>
-          <Switch
-            checked={editMode}
-            onChange={(e) => setEditMode(e.currentTarget.checked)}
-            label="Edit mode"
-            size="md"
-          />
+          <Group gap="xs" wrap="nowrap">
+            <ThemeToggle />
+            <Switch
+              checked={editMode}
+              onChange={(e) => setEditMode(e.currentTarget.checked)}
+              label="Edit mode"
+              size="md"
+            />
+          </Group>
         </Group>
       </AppShell.Header>
 

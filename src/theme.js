@@ -4,8 +4,22 @@ import { createTheme } from '@mantine/core'
 // for meals that are ready to make. Paper and ink tokens live in index.css.
 export const theme = createTheme({
   primaryColor: 'tomato',
-  primaryShade: 6,
+  primaryShade: { light: 6, dark: 3 },
+  autoContrast: true,
   colors: {
+    // Candlelit dark: the menu after dark, warm brown paper and cream ink.
+    dark: [
+      '#f1e8d8',
+      '#d9cdb8',
+      '#b3a691',
+      '#8c7f6b',
+      '#5e5244',
+      '#3a3128',
+      '#2e2720',
+      '#262019',
+      '#1c1814',
+      '#14110e',
+    ],
     // Warm grays in place of Mantine's cool, blue-tinted default.
     gray: [
       '#faf7f1',

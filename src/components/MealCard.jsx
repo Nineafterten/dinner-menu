@@ -75,7 +75,7 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
       <Collapse in={open} id={detailsId}>
         <Stack gap="xs" pt="sm">
           {cat && (
-            <Text size="xs" c="tomato.7" tt="uppercase" fw={600}>
+            <Text size="xs" tt="uppercase" fw={600} className="meal-card__category">
               {cat.label}
             </Text>
           )}
