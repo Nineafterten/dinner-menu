@@ -4,9 +4,47 @@ A personal household web app: a visual library of the meals we know how to make.
 Browse, search, and filter — and flip a per-meal switch for "I have everything to
 make this right now." Works on laptop, phone, and iPad.
 
+**Live:** [dinner-menu.nineafterten.com](https://dinner-menu.nineafterten.com). The
+screenshots show the made-up sample menu in `dev/sample-menu.json`.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/menu-dark.webp">
+  <img src="docs/screenshots/menu-light.webp" alt="The menu: category chips above a grid of meal cards, ready meals edged in herb green, and Black bean quesadillas opened to its ingredients and an optional guacamole and pickled jalapeños">
+</picture>
+
+## Screens
+
+**Add or edit a meal.** The form is laid out like the menu entry it becomes: a category
+tag, the name set large, one line per ingredient, and a "Nice to have" list for the
+optional ones.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/form-dark.webp">
+  <img src="docs/screenshots/form-light.webp" alt="Editing Black bean quesadillas: a Vegetarian tag, the name in large serif type, six ingredients on ruled lines, and guacamole and pickled jalapeños under Nice to have">
+</picture>
+
+**On a phone.** Cards stack in one column, the form fills the screen, and **Pick for me**
+chooses tonight's dinner from the meals that are ready.
+
+<p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/phone-menu-dark.webp">
+  <img src="docs/screenshots/phone-menu-light.webp" width="240" alt="The menu on a phone: one column of meal cards, with Black bean quesadillas opened">
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/phone-form-dark.webp">
+  <img src="docs/screenshots/phone-form-light.webp" width="240" alt="Editing Smash burgers on a phone, with bacon and caramelized onions under Nice to have">
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/phone-pick-dark.webp">
+  <img src="docs/screenshots/phone-pick-light.webp" width="240" alt="Pick for me on a phone: Tonight's dinner is Leftovers buffet, picked from 11 ready meals">
+</picture>
+</p>
+
 ## Stack
 
-- **React + Vite + Mantine** (dark, warm/amber theme)
+- **React + Vite + Mantine** (a printed-menu palette: cream paper by day, a candlelit dark
+  theme by night, following the device with a toggle in the header)
 - **localStorage** on each device, seeded from **`public/menu.json`**, which ships with the
   site. There is no backend.
 

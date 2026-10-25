@@ -34,6 +34,11 @@
         "tortilla chips",
         "lime"
       ],
+      "optionalIngredients": [
+        "avocado",
+        "cilantro",
+        "tortilla strips"
+      ],
       "notes": "Simmer 25 min, shred the chicken with two forks, then back in. Chips and lime at the table.",
       "ready": false,
       "created_at": "2026-10-02T18:01:00.000Z",
@@ -51,6 +56,10 @@
         "green onion",
         "sesame seeds"
       ],
+      "optionalIngredients": [
+        "sriracha mayo",
+        "pickled ginger"
+      ],
       "notes": "",
       "ready": true,
       "created_at": "2026-10-03T18:02:00.000Z",
@@ -67,6 +76,10 @@
         "pickles",
         "onion",
         "burger sauce"
+      ],
+      "optionalIngredients": [
+        "bacon",
+        "caramelized onions"
       ],
       "notes": "Cast iron ripping hot. 2 oz balls, smash hard, 90 s, flip, cheese, 30 s.",
       "ready": true,
@@ -124,6 +137,10 @@
         "corn tortillas",
         "cilantro",
         "white onion"
+      ],
+      "optionalIngredients": [
+        "cotija",
+        "lime crema"
       ],
       "notes": "Slow cooker 8 h, shred, then broil on a sheet pan 5 min for crispy edges.",
       "ready": false,
@@ -242,6 +259,10 @@
         "parmesan",
         "garlic bread"
       ],
+      "optionalIngredients": [
+        "fresh basil",
+        "red pepper flakes"
+      ],
       "notes": "",
       "ready": true,
       "created_at": "2026-10-14T18:13:00.000Z",
@@ -294,6 +315,10 @@
         "corn",
         "salsa",
         "sour cream"
+      ],
+      "optionalIngredients": [
+        "guacamole",
+        "pickled jalapeños"
       ],
       "notes": "",
       "ready": true,
