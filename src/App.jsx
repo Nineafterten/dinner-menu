@@ -12,7 +12,6 @@ import {
   SegmentedControl,
   SimpleGrid,
   Stack,
-  Switch,
   Text,
   TextInput,
   Title,
@@ -21,6 +20,7 @@ import { useMeals } from './hooks/useMeals'
 import { useFlip } from './hooks/useFlip'
 import { exportToFile, importFromFile, restorePublished } from './data/menuFile'
 import { CATEGORIES } from './lib/categories'
+import { AppMenu } from './components/AppMenu'
 import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
 import { MenuFilePanel } from './components/MenuFilePanel'
@@ -127,11 +127,12 @@ export default function App() {
           </Group>
           <Group gap="xs" wrap="nowrap">
             <ThemeToggle />
-            <Switch
-              checked={editMode}
-              onChange={(e) => setEditMode(e.currentTarget.checked)}
-              label="Edit mode"
-              size="md"
+            <AppMenu
+              readyOnly={readyOnly}
+              readyCount={readyCount}
+              onReadyOnlyChange={setReadyOnly}
+              editMode={editMode}
+              onEditModeChange={setEditMode}
             />
           </Group>
         </Group>
@@ -161,23 +162,14 @@ export default function App() {
               />
             )}
 
-            <Group justify="space-between" wrap="nowrap" gap="sm">
-              <TextInput
-                placeholder="Meal or ingredient…"
-                aria-label="Search meals"
-                value={query}
-                onChange={(e) => setQuery(e.currentTarget.value)}
-                flex={1}
-                maw={{ sm: 360 }}
-                leftSection={<span>🔎</span>}
-              />
-              <Switch
-                checked={readyOnly}
-                onChange={(e) => setReadyOnly(e.currentTarget.checked)}
-                label={`Ready now${readyCount ? ` (${readyCount})` : ''}`}
-                color="herb"
-              />
-            </Group>
+            <TextInput
+              placeholder="Meal or ingredient…"
+              aria-label="Search meals"
+              value={query}
+              onChange={(e) => setQuery(e.currentTarget.value)}
+              maw={{ sm: 360 }}
+              leftSection={<span>🔎</span>}
+            />
 
             {usedCategories.length > 0 && (
               <Chip.Group
@@ -289,7 +281,7 @@ function EmptyState({ hasMeals, editMode, onAdd }) {
         <Text c="dimmed" ta="center" maw={360}>
           {editMode
             ? 'Add the first meal you know how to make.'
-            : 'Turn on Edit mode to start adding meals you know how to make.'}
+            : 'Turn on Entry mode in the menu to start adding meals you know how to make.'}
         </Text>
         {editMode && (
           <Button onClick={onAdd} mt="xs">

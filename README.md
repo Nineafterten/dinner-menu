@@ -56,13 +56,13 @@ npm run dev
 ```
 
 `dev/sample-menu.json` holds 24 made-up meals for trying the UI. Load it with **Import a
-file…** in edit mode. It isn't published, so never copy it over `public/menu.json`.
+file…** in Entry mode. It isn't published, so never copy it over `public/menu.json`.
 
 ## Publishing the menu
 
 Every device shows the menu published with the site, `public/menu.json`. To change it:
 
-1. Turn on **Edit mode** and make your changes.
+1. Turn on **Entry mode** in the header menu (☰) and make your changes.
 2. Choose **Export menu.json** in the *Publish the menu* panel.
 3. Replace `public/menu.json` in the repo with the exported file, commit, and push. The
    site redeploys in about a minute.
@@ -74,9 +74,11 @@ its own copy instead when it already had meals before `menu.json` existed, or af
 
 ## How it works
 
-- **Edit mode** (header switch) reveals the add/edit controls and the publish panel.
-  It's a soft, no-auth convention — turn it on only on your own devices. The ready
-  switches work without it.
+- **The header menu** (☰) holds the **Ready now** filter and **Entry mode**. A dot on
+  the menu button shows while Ready now is on.
+- **Entry mode** reveals the add/edit controls and the publish panel. It's a soft,
+  no-auth convention — turn it on only on your own devices. The ready switches work
+  without it.
 - **Cards** show one line per meal; tap one for its ingredients and notes. Ready meals
   sort first, and **Pick for me** chooses at random among the ready meals that match
   the current filters.
