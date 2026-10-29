@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Card, Collapse, FileButton, Group, Stack, Text, UnstyledButton } from '@mantine/core'
+import { ChevronDown } from 'lucide-react'
 
 const DATE = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' })
 
@@ -15,9 +16,7 @@ export function MenuFilePanel({ publishedAt, onExport, onImport, onRestore }) {
       >
         <Group justify="space-between" wrap="nowrap">
           <Text fw={600}>Publish the menu</Text>
-          <Text c="dimmed" className={open ? 'chevron chevron--open' : 'chevron'} aria-hidden>
-            ▾
-          </Text>
+          <ChevronDown size={16} className={open ? 'chevron chevron--open' : 'chevron'} aria-hidden />
         </Group>
       </UnstyledButton>
 

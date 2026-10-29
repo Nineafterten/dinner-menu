@@ -44,7 +44,8 @@ chooses tonight's dinner from the meals that are ready.
 ## Stack
 
 - **React + Vite + Mantine** (a printed-menu palette: cream paper by day, a candlelit dark
-  theme by night, following the device unless the header menu says otherwise)
+  theme by night, following the device unless the header menu says otherwise), a 50s-diner
+  wordmark drawn as SVG from Yellowtail, and [Lucide](https://lucide.dev) icons
 - **localStorage** on each device, seeded from **`public/menu.json`**, which ships with the
   site. There is no backend.
 
@@ -82,7 +83,7 @@ its own copy instead when it already had meals before `menu.json` existed, or af
 - **Cards** show one line per meal; tap one for its ingredients and notes. Ready meals
   sort first, a line above them counts what the filters show, and **Pick for me**
   chooses at random among the ready meals that match the current filters.
-- **Data model:** name, optional category (emoji icon), the ingredients a meal
+- **Data model:** name, optional category (with a line icon), the ingredients a meal
   needs, `optionalIngredients` (nice to have; absent on older meals), prep/cook
   notes, and the `ready` boolean.
 - **The add/edit form** is laid out like the menu entry it becomes. Enter starts the

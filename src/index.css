@@ -90,9 +90,18 @@ body {
   min-height: calc(2em * var(--mantine-line-height));
 }
 
-.meal-card__icon {
+.meal-card__icon,
+.pick-dinner__icon {
   flex-shrink: 0;
-  line-height: 1;
+  color: var(--dm-dim);
+}
+
+.pick-dinner__icon {
+  color: var(--dm-accent-ink);
+}
+
+.empty-state__icon {
+  color: var(--dm-dim);
 }
 
 .meal-card__category {
@@ -105,6 +114,7 @@ body {
 
 .chevron {
   flex-shrink: 0;
+  color: var(--dm-dim);
   transition: transform 150ms ease;
 }
 
@@ -138,15 +148,27 @@ body {
   .meal-card .mantine-Switch-label {
     display: none;
   }
-
-  .app-title {
-    font-size: 20px;
-  }
 }
 
-.app-title,
-.mantine-AppShell-header .mantine-Switch-label {
-  white-space: nowrap;
+.app-title {
+  line-height: 0;
+}
+
+/* The wordmark: tomato script over a mustard swash, recolored by the theme. */
+.app-logo {
+  display: block;
+  width: auto;
+  height: 40px;
+}
+
+.app-logo__word {
+  fill: var(--dm-accent);
+}
+
+.app-logo__swash {
+  stroke: var(--dm-chip-ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
 }
 
 /* Header menu: a 44px burger, with a herb dot while Ready now filters the list. */
@@ -213,6 +235,12 @@ body {
 }
 
 /* Category chips: a soft mustard tag; the selected one is solid tomato. */
+.chip-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .chip-row .mantine-Chip-label {
   background: var(--dm-chip-bg);
   color: var(--dm-chip-ink);
@@ -223,7 +251,7 @@ body {
   color: var(--dm-on-accent);
 }
 
-.chip-row .mantine-Chip-label[data-checked] .mantine-Chip-iconWrapper {
+.chip-row .mantine-Chip-label[data-checked] .mantine-Chip-checkIcon {
   color: var(--dm-on-accent);
 }
 

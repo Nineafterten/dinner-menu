@@ -15,12 +15,14 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
+import { Dices, EggFried, NotepadText, Search } from 'lucide-react'
 import { useMeals } from './hooks/useMeals'
 import { useFlip } from './hooks/useFlip'
 import { exportToFile, importFromFile, restorePublished } from './data/menuFile'
 import { CATEGORIES } from './lib/categories'
 import { AboutModal } from './components/AboutModal'
 import { AppMenu } from './components/AppMenu'
+import { Logo } from './components/Logo'
 import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
 import { MenuFilePanel } from './components/MenuFilePanel'
@@ -131,10 +133,9 @@ export default function App() {
     <AppShell header={{ height: 60 }} padding="md" className="app-shell">
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between" wrap="nowrap">
-          <Group gap="xs" wrap="nowrap">
-            <Text fz={24} className="app-logo" aria-hidden>🍽️</Text>
-            <Title order={3} className="app-title">Dinner Menu</Title>
-          </Group>
+          <Title order={1} className="app-title">
+            <Logo />
+          </Title>
           <AppMenu
             readyOnly={readyOnly}
             readyCount={readyCount}
@@ -176,7 +177,7 @@ export default function App() {
               value={query}
               onChange={(e) => setQuery(e.currentTarget.value)}
               maw={{ sm: 360 }}
-              leftSection={<span>🔎</span>}
+              leftSection={<Search size={16} aria-hidden />}
             />
 
             {usedCategories.length > 0 && (
@@ -187,11 +188,17 @@ export default function App() {
               >
                 <Group gap="xs" className="chip-row">
                   <Chip value="all" variant="light">
-                    All
+                    <span className="chip-label">
+                      <NotepadText size={15} aria-hidden />
+                      All
+                    </span>
                   </Chip>
                   {usedCategories.map((c) => (
                     <Chip key={c.value} value={c.value} variant="light">
-                      {c.icon} {c.label}
+                      <span className="chip-label">
+                        <c.Icon size={15} aria-hidden />
+                        {c.label}
+                      </span>
                     </Chip>
                   ))}
                 </Group>
@@ -250,8 +257,8 @@ export default function App() {
       ) : (
         pickPool.length > 0 && (
           <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
-            <Button size="md" radius="xl" onClick={pickDinner}>
-              🎲 Pick for me
+            <Button size="md" radius="xl" onClick={pickDinner} leftSection={<Dices size={18} aria-hidden />}>
+              Pick for me
             </Button>
           </Affix>
         )
@@ -294,7 +301,7 @@ function EmptyState({ hasMeals, editMode, onAdd }) {
   return (
     <Center py={60}>
       <Stack align="center" gap="sm">
-        <Text fz={48}>🍳</Text>
+        <EggFried size={48} strokeWidth={1.5} className="empty-state__icon" aria-hidden />
         <Text fw={600} fz="lg">
           No meals yet
         </Text>

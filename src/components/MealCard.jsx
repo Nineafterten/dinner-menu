@@ -9,11 +9,13 @@ import {
   Text,
   UnstyledButton,
 } from '@mantine/core'
-import { categoryMeta } from '../lib/categories'
+import { ChevronDown, Pencil } from 'lucide-react'
+import { categoryIcon, categoryMeta } from '../lib/categories'
 import { Ingredients, hasIngredients } from './Ingredients'
 
 export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
   const cat = categoryMeta(meal.category)
+  const Icon = categoryIcon(meal.category)
   const [open, setOpen] = useState(false)
   const detailsId = useId()
   const hasDetails = Boolean(cat || hasIngredients(meal) || meal.notes)
@@ -35,16 +37,16 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
           disabled={!hasDetails}
         >
           <Group gap="xs" wrap="nowrap">
-            <Text fz={22} className="meal-card__icon" aria-hidden>
-              {cat ? cat.icon : '🍽️'}
-            </Text>
+            <Icon size={22} strokeWidth={1.75} className="meal-card__icon" aria-hidden />
             <Text fw={600} lineClamp={open ? undefined : 2}>
               {meal.name}
             </Text>
             {hasDetails && (
-              <Text c="dimmed" className={open ? 'chevron chevron--open' : 'chevron'} aria-hidden>
-                ▾
-              </Text>
+              <ChevronDown
+                size={16}
+                className={open ? 'chevron chevron--open' : 'chevron'}
+                aria-hidden
+              />
             )}
           </Group>
         </UnstyledButton>
@@ -57,7 +59,7 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
               aria-label={`Edit ${meal.name}`}
               onClick={() => onEdit(meal)}
             >
-              ✏️
+              <Pencil size={16} aria-hidden />
             </ActionIcon>
           )}
           <Switch
