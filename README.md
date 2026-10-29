@@ -44,7 +44,7 @@ chooses tonight's dinner from the meals that are ready.
 ## Stack
 
 - **React + Vite + Mantine** (a printed-menu palette: cream paper by day, a candlelit dark
-  theme by night, following the device with a toggle in the header)
+  theme by night, following the device unless the header menu says otherwise)
 - **localStorage** on each device, seeded from **`public/menu.json`**, which ships with the
   site. There is no backend.
 
@@ -74,7 +74,7 @@ its own copy instead when it already had meals before `menu.json` existed, or af
 
 ## How it works
 
-- **The header menu** (☰) holds the **Ready now** filter and **Entry mode**. A dot on
+- **The header menu** (☰) holds the **Ready now** filter, **Entry mode** and the theme. A dot on
   the menu button shows while Ready now is on.
 - **Entry mode** reveals the add/edit controls and the publish panel. It's a soft,
   no-auth convention — turn it on only on your own devices. The ready switches work

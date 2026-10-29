@@ -1,9 +1,18 @@
-import { useState } from 'react'
-import { Burger, Popover, Stack, Switch } from '@mantine/core'
+import { useId, useState } from 'react'
+import {
+  Burger,
+  Divider,
+  Popover,
+  SegmentedControl,
+  Stack,
+  Switch,
+  Text,
+  useMantineColorScheme,
+} from '@mantine/core'
 
 /**
- * The header's menu: the Ready now filter and Entry mode, plus room for settings
- * that don't need a spot on the page. A dot on the button says a filter is on.
+ * The header's menu: the Ready now filter, Entry mode and the theme, plus room for
+ * settings that don't need a spot on the page. A dot on the button says a filter is on.
  */
 export function AppMenu({ readyOnly, readyCount, onReadyOnlyChange, editMode, onEditModeChange }) {
   const [opened, setOpened] = useState(false)
@@ -47,8 +56,38 @@ export function AppMenu({ readyOnly, readyCount, onReadyOnlyChange, editMode, on
             label="Entry mode"
             description="Add, edit and publish meals"
           />
+          <Divider color="var(--dm-line)" />
+          <ThemeChoice />
         </Stack>
       </Popover.Dropdown>
     </Popover>
+  )
+}
+
+const THEMES = [
+  { label: 'Auto', value: 'auto' },
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+]
+
+/** Paper or candlelit, or follow the device; the choice is remembered on this device. */
+function ThemeChoice() {
+  const { colorScheme, setColorScheme } = useMantineColorScheme()
+  const labelId = useId()
+
+  return (
+    <div>
+      <Text id={labelId} size="sm" mb={6}>
+        Theme
+      </Text>
+      <SegmentedControl
+        fullWidth
+        role="radiogroup"
+        aria-labelledby={labelId}
+        data={THEMES}
+        value={colorScheme}
+        onChange={setColorScheme}
+      />
+    </div>
   )
 }

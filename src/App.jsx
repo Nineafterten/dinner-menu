@@ -9,7 +9,6 @@ import {
   Container,
   Group,
   Loader,
-  SegmentedControl,
   SimpleGrid,
   Stack,
   Text,
@@ -25,7 +24,6 @@ import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
 import { MenuFilePanel } from './components/MenuFilePanel'
 import { PickDinnerModal } from './components/PickDinnerModal'
-import { ThemeToggle } from './components/ThemeToggle'
 
 export default function App() {
   const { meals, publishedAt, loading, error, createMeal, updateMeal, removeMeal } =
@@ -125,16 +123,13 @@ export default function App() {
             <Text fz={24} className="app-logo" aria-hidden>🍽️</Text>
             <Title order={3} className="app-title">Dinner Menu</Title>
           </Group>
-          <Group gap="xs" wrap="nowrap">
-            <ThemeToggle />
-            <AppMenu
-              readyOnly={readyOnly}
-              readyCount={readyCount}
-              onReadyOnlyChange={setReadyOnly}
-              editMode={editMode}
-              onEditModeChange={setEditMode}
-            />
-          </Group>
+          <AppMenu
+            readyOnly={readyOnly}
+            readyCount={readyCount}
+            onReadyOnlyChange={setReadyOnly}
+            editMode={editMode}
+            onEditModeChange={setEditMode}
+          />
         </Group>
       </AppShell.Header>
 
