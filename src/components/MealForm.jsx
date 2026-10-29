@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { Button, Modal, Switch, Textarea, UnstyledButton, VisuallyHidden } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { CATEGORIES } from '../lib/categories'
@@ -120,10 +120,32 @@ export function MealForm({ opened, meal, onClose, onSave, onDelete }) {
   const nameId = useId()
   const categoryId = useId()
   const formRef = useRef(null)
+  const [nameEl, setNameEl] = useState(null)
 
   useEffect(() => {
     if (opened) setForm(toForm(meal))
   }, [opened, meal])
+
+  // The name wraps instead of clipping, so its box grows to fit each line. It
+  // re-fits when its width changes too: the modal opens mid-animation, and
+  // phones rotate.
+  useLayoutEffect(() => {
+    const el = nameEl
+    if (!el) return
+    const fit = () => {
+      el.style.height = 'auto'
+      el.style.height = `${el.scrollHeight}px`
+    }
+    fit()
+    let width = el.clientWidth
+    const observer = new ResizeObserver(() => {
+      if (el.clientWidth === width) return
+      width = el.clientWidth
+      fit()
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [nameEl, form.name])
 
   const set = (key) => (value) => setForm((f) => ({ ...f, [key]: value }))
   const canSave = form.name.trim() !== ''
@@ -194,16 +216,18 @@ export function MealForm({ opened, meal, onClose, onSave, onDelete }) {
                 <label htmlFor={nameId} className="menu-entry__name-label">
                   Meal
                 </label>
-                <input
+                <textarea
+                  ref={setNameEl}
                   id={nameId}
                   className="menu-entry__name"
                   name="meal-title"
+                  rows={1}
                   autoComplete="off"
                   enterKeyHint="next"
                   placeholder="Sheet-pan chicken thighs"
                   required
                   value={form.name}
-                  onChange={(e) => set('name')(e.currentTarget.value)}
+                  onChange={(e) => set('name')(e.currentTarget.value.replace(/\s*\n\s*/g, ' '))}
                   onKeyDown={handleNameKeyDown}
                   data-autofocus
                 />

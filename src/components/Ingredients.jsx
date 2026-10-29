@@ -18,7 +18,7 @@ export function Ingredients({ meal }) {
       {optional.length > 0 && (
         <div>
           <Text size="xs" c="dimmed" fs="italic" ff="heading">
-            Optional
+            Nice to have
           </Text>
           <Text size="sm" c="dimmed">
             {optional.join(' · ')}

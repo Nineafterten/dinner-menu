@@ -287,6 +287,8 @@ body {
   border: 0;
   border-bottom: 1.5px dashed var(--dm-accent);
   border-radius: 0;
+  resize: none;
+  overflow: hidden;
 }
 
 .menu-entry__name::placeholder {
