@@ -100,6 +100,20 @@ body {
   color: var(--dm-accent-ink);
 }
 
+.meal-card__heart {
+  color: var(--dm-dim);
+}
+
+.meal-card__heart--on {
+  color: var(--dm-accent);
+}
+
+.meal-card__tag {
+  color: var(--dm-dim);
+  border-color: var(--dm-line);
+  text-transform: none;
+}
+
 .empty-state__icon {
   color: var(--dm-dim);
 }
@@ -191,6 +205,7 @@ body {
 
 .app-menu {
   min-width: 260px;
+  max-width: min(340px, calc(100vw - 32px));
   background: var(--dm-surface);
   border-color: var(--dm-line);
 }
@@ -241,17 +256,17 @@ body {
   gap: 5px;
 }
 
-.chip-row .mantine-Chip-label {
+:is(.chip-row, .app-menu__tags) .mantine-Chip-label {
   background: var(--dm-chip-bg);
   color: var(--dm-chip-ink);
 }
 
-.chip-row .mantine-Chip-label[data-checked] {
+:is(.chip-row, .app-menu__tags) .mantine-Chip-label[data-checked] {
   background: var(--dm-accent);
   color: var(--dm-on-accent);
 }
 
-.chip-row .mantine-Chip-label[data-checked] .mantine-Chip-checkIcon {
+:is(.chip-row, .app-menu__tags) .mantine-Chip-label[data-checked] .mantine-Chip-checkIcon {
   color: var(--dm-on-accent);
 }
 

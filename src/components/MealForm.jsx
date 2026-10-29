@@ -1,7 +1,8 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
-import { Button, Modal, Switch, Textarea, UnstyledButton, VisuallyHidden } from '@mantine/core'
+import { Button, Modal, Switch, TagsInput, Textarea, UnstyledButton, VisuallyHidden } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { CATEGORIES } from '../lib/categories'
+import { mealSteps } from '../lib/meal'
 
 let rowKey = 0
 const toRows = (items) => {
@@ -16,7 +17,8 @@ function toForm(meal) {
     category: meal?.category || '',
     ingredients: toRows(meal?.ingredients),
     optionalIngredients: toRows(meal?.optionalIngredients),
-    notes: meal?.notes || '',
+    tags: meal?.tags || [],
+    ...mealSteps(meal),
     ready: Boolean(meal?.ready),
   }
 }
@@ -25,7 +27,7 @@ function toForm(meal) {
  * One editable line per ingredient. Enter starts the next line, Backspace on an
  * empty line removes it, and pasting several lines splits them into rows.
  */
-function IngredientRows({ heading, itemLabel, addLabel, rows, onChange }) {
+function IngredientRows({ heading, itemLabel, addLabel, rows, suggestionsId, onChange }) {
   const headingId = useId()
   const inputs = useRef(new Map())
   const [focusKey, setFocusKey] = useState(null)
@@ -86,6 +88,7 @@ function IngredientRows({ heading, itemLabel, addLabel, rows, onChange }) {
               className="menu-entry__row-input"
               aria-label={`${itemLabel} ${index + 1}`}
               autoComplete="off"
+              list={suggestionsId}
               enterKeyHint="next"
               value={row.text}
               onChange={(e) => setText(row.key, e.currentTarget.value)}
@@ -115,13 +118,24 @@ function IngredientRows({ heading, itemLabel, addLabel, rows, onChange }) {
  * Add or edit a meal, laid out like the menu entry it becomes. A draft prefills a
  * new meal, as Duplicate does.
  */
-export function MealForm({ opened, meal, draft, onClose, onSave, onDelete, onDuplicate }) {
+export function MealForm({
+  opened,
+  meal,
+  draft,
+  tagOptions,
+  ingredientOptions,
+  onClose,
+  onSave,
+  onDelete,
+  onDuplicate,
+}) {
   const [form, setForm] = useState(() => toForm(meal ?? draft))
   const [saving, setSaving] = useState(false)
   const isEdit = Boolean(meal)
   const isPhone = useMediaQuery('(max-width: 47.99em)')
   const nameId = useId()
   const categoryId = useId()
+  const suggestionsId = useId()
   const formRef = useRef(null)
   const [nameEl, setNameEl] = useState(null)
 
@@ -176,7 +190,11 @@ export function MealForm({ opened, meal, draft, onClose, onSave, onDelete, onDup
         category: form.category || null,
         ingredients: fromRows(form.ingredients),
         optionalIngredients: fromRows(form.optionalIngredients),
-        notes: form.notes.trim(),
+        tags: form.tags,
+        prep: form.prep.trim(),
+        cook: form.cook.trim(),
+        // Older meals kept one notes field; it's now the cook steps.
+        notes: undefined,
         ready: form.ready,
       })
       onClose()
@@ -254,6 +272,7 @@ export function MealForm({ opened, meal, draft, onClose, onSave, onDelete, onDup
                 itemLabel="Ingredient"
                 addLabel="Add an ingredient"
                 rows={form.ingredients}
+                suggestionsId={suggestionsId}
                 onChange={set('ingredients')}
               />
               <IngredientRows
@@ -261,17 +280,42 @@ export function MealForm({ opened, meal, draft, onClose, onSave, onDelete, onDup
                 itemLabel="Optional ingredient"
                 addLabel="Add an optional one"
                 rows={form.optionalIngredients}
+                suggestionsId={suggestionsId}
                 onChange={set('optionalIngredients')}
               />
+              <datalist id={suggestionsId}>
+                {ingredientOptions.map((text) => (
+                  <option key={text} value={text} />
+                ))}
+              </datalist>
             </div>
 
+            <TagsInput
+              label="Tags"
+              description="Who it's for, or anything to filter by"
+              placeholder={form.tags.length ? undefined : 'Doug, Lucas, Quick…'}
+              data={tagOptions}
+              value={form.tags}
+              onChange={set('tags')}
+              clearable
+            />
+
             <Textarea
-              label="Kitchen notes"
+              label="Prep"
+              placeholder="Marinate the chicken for 30 minutes…"
+              autosize
+              minRows={2}
+              value={form.prep}
+              onChange={(e) => set('prep')(e.currentTarget.value)}
+            />
+
+            <Textarea
+              label="Cook"
               placeholder="425°F for 35 min, flip halfway…"
               autosize
-              minRows={3}
-              value={form.notes}
-              onChange={(e) => set('notes')(e.currentTarget.value)}
+              minRows={2}
+              value={form.cook}
+              onChange={(e) => set('cook')(e.currentTarget.value)}
             />
 
             <Switch

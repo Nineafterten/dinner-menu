@@ -69,26 +69,32 @@ Every device shows the menu published with the site, `public/menu.json`. To chan
    site redeploys in about a minute.
 
 A device picks up a newly published menu when it has no meals yet, or when it follows the
-published menu and nothing on it has changed since that menu was exported. A device keeps
+published menu and no meal on it has been edited since that menu was exported. Flipping a
+Ready switch isn't an edit, so the next published menu replaces those flips. A device keeps
 its own copy instead when it already had meals before `menu.json` existed, or after
 **Import a file…**. **Use the published menu** puts it back on the published one.
 
 ## How it works
 
-- **The header menu** (☰) holds the **Ready now** filter, **Entry mode**, the theme and
-  **About** (version and build). A dot on the menu button shows while Ready now is on.
+- **The header menu** (☰) holds the **Ready now**, **Favorites** and **Tag** filters,
+  **Entry mode**, the theme and **About** (version and build). A dot on the menu button
+  shows while a filter is on.
+- **Favorites** are the hearts on the cards. Each device keeps its own, apart from the
+  meals (`dinner-menu:favorites`), so a published menu never changes them.
 - **Entry mode** reveals the add/edit controls and the publish panel. It's a soft,
   no-auth convention — turn it on only on your own devices. The ready switches work
   without it.
-- **Cards** show one line per meal; tap one for its ingredients and notes. Ready meals
+- **Cards** show one line per meal; tap one for its ingredients, tags, and prep and cook steps. Ready meals
   sort first, a line above them counts what the filters show, and **Pick for me**
   chooses at random among the ready meals that match the current filters.
 - **Data model:** name, optional category (with a line icon), the ingredients a meal
-  needs, `optionalIngredients` (nice to have; absent on older meals), prep/cook
-  notes, and the `ready` boolean.
+  needs, `optionalIngredients` (nice to have), `tags` (free-form, such as who a meal is
+  for), `prep` and `cook` steps, and the `ready` boolean. Older meals may lack the newer
+  fields; their one `notes` field reads as `cook` and moves there when the meal is saved.
 - **The add/edit form** is laid out like the menu entry it becomes. Enter starts the
   next ingredient line, Backspace on an empty line removes it, and pasting several
-  lines splits them into rows. **Duplicate this meal** turns the edit form into a new
+  lines splits them into rows, and each line suggests ingredients already on the menu.
+  **Duplicate this meal** turns the edit form into a new
   dish with the same details, its name selected for renaming.
 - The data layer lives in [`src/data/`](src/data): `localRepository.js` reads and writes
   this device's copy, and `menuFile.js` handles export, import, and `menu.json`.

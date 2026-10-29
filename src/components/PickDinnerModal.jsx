@@ -1,6 +1,7 @@
 import { Button, Group, Modal, Stack, Text } from '@mantine/core'
 import { categoryIcon } from '../lib/categories'
 import { Ingredients } from './Ingredients'
+import { Steps } from './Steps'
 
 /** Shows the randomly picked meal, with a way to pick again. */
 export function PickDinnerModal({ meal, poolSize, onPickAgain, onClose }) {
@@ -18,12 +19,7 @@ export function PickDinnerModal({ meal, poolSize, onPickAgain, onClose }) {
           </Group>
 
           <Ingredients meal={meal} />
-
-          {meal.notes && (
-            <Text size="sm" c="dimmed" className="meal-card__notes">
-              {meal.notes}
-            </Text>
-          )}
+          <Steps meal={meal} />
 
           <Group justify="space-between" mt="sm">
             <Text size="xs" c="dimmed">

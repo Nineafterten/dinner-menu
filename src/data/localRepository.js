@@ -18,11 +18,13 @@ export const localRepository = {
     return row
   },
 
-  async update(id, patch) {
+  // `edit: false` saves without marking the meal changed, so a device that only
+  // flips Ready switches keeps taking newly published menus (see menuFile.js).
+  async update(id, patch, { edit = true } = {}) {
     const meals = readCache()
     const idx = meals.findIndex((m) => m.id === id)
     if (idx === -1) return null
-    meals[idx] = { ...meals[idx], ...patch, updated_at: nowIso() }
+    meals[idx] = { ...meals[idx], ...patch, ...(edit && { updated_at: nowIso() }) }
     writeCache(meals)
     return meals[idx]
   },

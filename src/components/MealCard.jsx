@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import {
   ActionIcon,
+  Badge,
   Card,
   Collapse,
   Group,
@@ -9,16 +10,18 @@ import {
   Text,
   UnstyledButton,
 } from '@mantine/core'
-import { ChevronDown, Pencil } from 'lucide-react'
+import { ChevronDown, Heart, Pencil } from 'lucide-react'
 import { categoryIcon, categoryMeta } from '../lib/categories'
 import { Ingredients, hasIngredients } from './Ingredients'
+import { Steps, hasSteps } from './Steps'
 
-export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
+export function MealCard({ meal, editMode, favorite, onToggleFavorite, onToggleReady, onEdit }) {
   const cat = categoryMeta(meal.category)
   const Icon = categoryIcon(meal.category)
   const [open, setOpen] = useState(false)
   const detailsId = useId()
-  const hasDetails = Boolean(cat || hasIngredients(meal) || meal.notes)
+  const tags = meal.tags || []
+  const hasDetails = Boolean(cat || tags.length || hasIngredients(meal) || hasSteps(meal))
 
   return (
     <Card
@@ -52,6 +55,16 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
         </UnstyledButton>
 
         <Group gap={4} wrap="nowrap">
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            className={favorite ? 'meal-card__heart meal-card__heart--on' : 'meal-card__heart'}
+            aria-label={`Favorite ${meal.name}`}
+            aria-pressed={favorite}
+            onClick={() => onToggleFavorite(meal.id)}
+          >
+            <Heart size={18} fill={favorite ? 'currentColor' : 'none'} aria-hidden />
+          </ActionIcon>
           {editMode && (
             <ActionIcon
               variant="subtle"
@@ -76,19 +89,23 @@ export function MealCard({ meal, editMode, onToggleReady, onEdit }) {
 
       <Collapse in={open} id={detailsId}>
         <Stack gap="xs" pt="sm">
-          {cat && (
-            <Text size="xs" tt="uppercase" fw={600} className="meal-card__category">
-              {cat.label}
-            </Text>
+          {(cat || tags.length > 0) && (
+            <Group gap={6}>
+              {cat && (
+                <Text size="xs" tt="uppercase" fw={600} className="meal-card__category">
+                  {cat.label}
+                </Text>
+              )}
+              {tags.map((tag) => (
+                <Badge key={tag} size="sm" variant="outline" color="gray" className="meal-card__tag">
+                  {tag}
+                </Badge>
+              ))}
+            </Group>
           )}
 
           <Ingredients meal={meal} />
-
-          {meal.notes && (
-            <Text size="sm" c="dimmed" className="meal-card__notes">
-              {meal.notes}
-            </Text>
-          )}
+          <Steps meal={meal} />
         </Stack>
       </Collapse>
     </Card>

@@ -40,10 +40,10 @@ export function useMeals() {
   )
 
   const updateMeal = useCallback(
-    async (id, patch) => {
+    async (id, patch, options) => {
       // Optimistic: reflect the change immediately, then confirm.
       setMeals((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)))
-      await localRepository.update(id, patch)
+      await localRepository.update(id, patch, options)
       await reload()
     },
     [reload]

@@ -16,10 +16,12 @@ import {
   Title,
 } from '@mantine/core'
 import { Dices, EggFried, NotepadText, Search } from 'lucide-react'
+import { useFavorites } from './hooks/useFavorites'
 import { useMeals } from './hooks/useMeals'
 import { useFlip } from './hooks/useFlip'
 import { exportToFile, importFromFile, restorePublished } from './data/menuFile'
 import { CATEGORIES } from './lib/categories'
+import { distinctValues, mealSteps } from './lib/meal'
 import { AboutModal } from './components/AboutModal'
 import { AppMenu } from './components/AppMenu'
 import { Logo } from './components/Logo'
@@ -28,14 +30,17 @@ import { MealForm } from './components/MealForm'
 import { MenuFilePanel } from './components/MenuFilePanel'
 import { PickDinnerModal } from './components/PickDinnerModal'
 
+const NO_FILTERS = { readyOnly: false, favoritesOnly: false, tag: null }
+
 export default function App() {
   const { meals, publishedAt, loading, error, createMeal, updateMeal, removeMeal } =
     useMeals()
+  const { favorites, toggleFavorite } = useFavorites()
 
   const [editMode, setEditMode] = useState(false)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('all')
-  const [readyOnly, setReadyOnly] = useState(false)
+  const [filters, setFilters] = useState(NO_FILTERS)
 
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -53,22 +58,41 @@ export default function App() {
     return CATEGORIES.filter((c) => set.has(c.value))
   }, [meals])
 
+  const tags = useMemo(() => distinctValues(meals, (m) => m.tags), [meals])
+  const ingredientOptions = useMemo(
+    () => distinctValues(meals, (m) => [...(m.ingredients || []), ...(m.optionalIngredients || [])]),
+    [meals]
+  )
+  // A tag filter lapses when the last meal with that tag loses it.
+  const activeTag = tags.includes(filters.tag) ? filters.tag : null
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     const matches = meals.filter((m) => {
-      if (readyOnly && !m.ready) return false
+      if (filters.readyOnly && !m.ready) return false
+      if (filters.favoritesOnly && !favorites.has(m.id)) return false
+      if (activeTag && !(m.tags || []).includes(activeTag)) return false
       if (category !== 'all' && m.category !== category) return false
       if (!q) return true
-      const haystack = [m.name, m.notes, ...(m.ingredients || []), ...(m.optionalIngredients || [])]
+      const { prep, cook } = mealSteps(m)
+      const haystack = [
+        m.name,
+        prep,
+        cook,
+        ...(m.ingredients || []),
+        ...(m.optionalIngredients || []),
+        ...(m.tags || []),
+      ]
         .join(' ')
         .toLowerCase()
       return haystack.includes(q)
     })
     // Ready meals first; the repository already sorts by name, and sort is stable.
     return [...matches].sort((a, b) => Number(Boolean(b.ready)) - Number(Boolean(a.ready)))
-  }, [meals, query, category, readyOnly])
+  }, [meals, query, category, filters, activeTag, favorites])
 
   const readyCount = useMemo(() => meals.filter((m) => m.ready).length, [meals])
+  const favoriteCount = useMemo(() => meals.filter((m) => favorites.has(m.id)).length, [meals, favorites])
 
   // "Pick for me" chooses among the ready meals that match the current filters.
   const pickPool = useMemo(() => filtered.filter((m) => m.ready), [filtered])
@@ -137,9 +161,11 @@ export default function App() {
             <Logo />
           </Title>
           <AppMenu
-            readyOnly={readyOnly}
+            filters={{ ...filters, tag: activeTag }}
+            onFiltersChange={(patch) => setFilters((f) => ({ ...f, ...patch }))}
             readyCount={readyCount}
-            onReadyOnlyChange={setReadyOnly}
+            favoriteCount={favoriteCount}
+            tags={tags}
             editMode={editMode}
             onEditModeChange={setEditMode}
             onAbout={() => setAboutOpen(true)}
@@ -235,9 +261,11 @@ export default function App() {
                     key={meal.id}
                     meal={meal}
                     editMode={editMode}
+                    favorite={favorites.has(meal.id)}
+                    onToggleFavorite={toggleFavorite}
                     onToggleReady={(id, ready) => {
                       captureLayout()
-                      updateMeal(id, { ready })
+                      updateMeal(id, { ready }, { edit: false })
                     }}
                     onEdit={openEdit}
                   />
@@ -277,6 +305,8 @@ export default function App() {
         opened={formOpen}
         meal={editing}
         draft={draft}
+        tagOptions={tags}
+        ingredientOptions={ingredientOptions}
         onClose={() => setFormOpen(false)}
         onSave={handleSave}
         onDelete={removeMeal}

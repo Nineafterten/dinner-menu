@@ -2,7 +2,9 @@ import { useId, useState } from 'react'
 import {
   Burger,
   Button,
+  Chip,
   Divider,
+  Group,
   Popover,
   SegmentedControl,
   Stack,
@@ -12,18 +14,23 @@ import {
 } from '@mantine/core'
 
 /**
- * The header's menu: the Ready now filter, Entry mode, the theme and About, plus room for
- * settings that don't need a spot on the page. A dot on the button says a filter is on.
+ * The header's menu: the Ready now, Favorites and tag filters, Entry mode, the theme
+ * and About, plus room for settings that don't need a spot on the page. A dot on the
+ * button says a filter is on.
  */
 export function AppMenu({
-  readyOnly,
+  filters,
+  onFiltersChange,
   readyCount,
-  onReadyOnlyChange,
+  favoriteCount,
+  tags,
   editMode,
   onEditModeChange,
   onAbout,
 }) {
   const [opened, setOpened] = useState(false)
+  const tagLabelId = useId()
+  const filtering = filters.readyOnly || filters.favoritesOnly || Boolean(filters.tag)
 
   return (
     <Popover
@@ -42,9 +49,9 @@ export function AppMenu({
           size="sm"
           opened={opened}
           onClick={() => setOpened((o) => !o)}
-          aria-label={readyOnly ? 'Menu, showing ready meals only' : 'Menu'}
+          aria-label={filtering ? 'Menu, filters on' : 'Menu'}
         >
-          {readyOnly && <span className="app-menu__dot" aria-hidden />}
+          {filtering && <span className="app-menu__dot" aria-hidden />}
         </Burger>
       </Popover.Target>
       <Popover.Dropdown className="app-menu" aria-label="Menu">
@@ -52,11 +59,42 @@ export function AppMenu({
           <Switch
             color="herb"
             size="md"
-            checked={readyOnly}
-            onChange={(e) => onReadyOnlyChange(e.currentTarget.checked)}
+            checked={filters.readyOnly}
+            onChange={(e) => onFiltersChange({ readyOnly: e.currentTarget.checked })}
             label={`Ready now${readyCount ? ` (${readyCount})` : ''}`}
             description="Only meals you have everything for"
           />
+          <Switch
+            size="md"
+            checked={filters.favoritesOnly}
+            onChange={(e) => onFiltersChange({ favoritesOnly: e.currentTarget.checked })}
+            label={`Favorites${favoriteCount ? ` (${favoriteCount})` : ''}`}
+            description="The meals you've hearted on this device"
+          />
+          {tags.length > 0 && (
+            <div>
+              <Text id={tagLabelId} size="sm" mb={6}>
+                Tag
+              </Text>
+              <Chip.Group
+                multiple={false}
+                value={filters.tag ?? ''}
+                onChange={(value) => onFiltersChange({ tag: value || null })}
+              >
+                <Group gap={6} className="app-menu__tags" role="radiogroup" aria-labelledby={tagLabelId}>
+                  <Chip value="" size="sm" variant="light">
+                    Any
+                  </Chip>
+                  {tags.map((tag) => (
+                    <Chip key={tag} value={tag} size="sm" variant="light">
+                      {tag}
+                    </Chip>
+                  ))}
+                </Group>
+              </Chip.Group>
+            </div>
+          )}
+          <Divider color="var(--dm-line)" />
           <Switch
             size="md"
             checked={editMode}
