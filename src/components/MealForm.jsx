@@ -111,9 +111,12 @@ function IngredientRows({ heading, itemLabel, addLabel, rows, onChange }) {
   )
 }
 
-/** Add or edit a meal, laid out like the menu entry it becomes. */
-export function MealForm({ opened, meal, onClose, onSave, onDelete }) {
-  const [form, setForm] = useState(() => toForm(meal))
+/**
+ * Add or edit a meal, laid out like the menu entry it becomes. A draft prefills a
+ * new meal, as Duplicate does.
+ */
+export function MealForm({ opened, meal, draft, onClose, onSave, onDelete, onDuplicate }) {
+  const [form, setForm] = useState(() => toForm(meal ?? draft))
   const [saving, setSaving] = useState(false)
   const isEdit = Boolean(meal)
   const isPhone = useMediaQuery('(max-width: 47.99em)')
@@ -123,8 +126,21 @@ export function MealForm({ opened, meal, onClose, onSave, onDelete }) {
   const [nameEl, setNameEl] = useState(null)
 
   useEffect(() => {
-    if (opened) setForm(toForm(meal))
-  }, [opened, meal])
+    if (opened) setForm(toForm(meal ?? draft))
+  }, [opened, meal, draft])
+
+  // A duplicate keeps the form open, so select its name, ready to rename, once the
+  // copied name has rendered.
+  const selectName = useRef(false)
+  useEffect(() => {
+    if (draft) selectName.current = true
+  }, [draft])
+  useEffect(() => {
+    if (!selectName.current || !nameEl) return
+    selectName.current = false
+    nameEl.focus()
+    nameEl.select()
+  }, [form.name, nameEl])
 
   // The name wraps instead of clipping, so its box grows to fit each line. It
   // re-fits when its width changes too: the modal opens mid-animation, and
@@ -266,17 +282,21 @@ export function MealForm({ opened, meal, onClose, onSave, onDelete }) {
             />
 
             {isEdit && (
-              <Button
-                variant="subtle"
-                color="red"
-                className="entry-delete"
-                onClick={() => {
-                  onDelete(meal.id)
-                  onClose()
-                }}
-              >
-                Delete this meal
-              </Button>
+              <div className="entry-actions">
+                <Button variant="subtle" color="dark" onClick={() => onDuplicate(meal)}>
+                  Duplicate this meal
+                </Button>
+                <Button
+                  variant="subtle"
+                  color="red"
+                  onClick={() => {
+                    onDelete(meal.id)
+                    onClose()
+                  }}
+                >
+                  Delete this meal
+                </Button>
+              </div>
             )}
           </Modal.Body>
         </form>

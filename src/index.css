@@ -173,6 +173,34 @@ body {
   border-color: var(--dm-line);
 }
 
+/* Lines the About label up with the switches above it. */
+.app-menu__about {
+  margin-inline: calc(var(--button-padding-x) * -1);
+}
+
+.app-menu__version {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 400;
+  color: var(--dm-dim);
+}
+
+.about-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.about-facts dt {
+  color: var(--dm-dim);
+}
+
+.about-facts dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Room for the floating button so it never covers the last card. */
 .menu-body {
   padding-bottom: 88px;
@@ -388,6 +416,9 @@ body {
   text-decoration: underline;
 }
 
-.entry-delete {
-  align-self: flex-start;
+.entry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-xs);
 }

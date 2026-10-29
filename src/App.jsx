@@ -19,6 +19,7 @@ import { useMeals } from './hooks/useMeals'
 import { useFlip } from './hooks/useFlip'
 import { exportToFile, importFromFile, restorePublished } from './data/menuFile'
 import { CATEGORIES } from './lib/categories'
+import { AboutModal } from './components/AboutModal'
 import { AppMenu } from './components/AppMenu'
 import { MealCard } from './components/MealCard'
 import { MealForm } from './components/MealForm'
@@ -36,8 +37,10 @@ export default function App() {
 
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [draft, setDraft] = useState(null)
   const [notice, setNotice] = useState(null)
   const [picked, setPicked] = useState(null)
+  const [aboutOpen, setAboutOpen] = useState(false)
 
   const gridRef = useRef(null)
   const captureLayout = useFlip(gridRef)
@@ -76,12 +79,21 @@ export default function App() {
 
   function openAdd() {
     setEditing(null)
+    setDraft(null)
     setFormOpen(true)
   }
 
   function openEdit(meal) {
     setEditing(meal)
+    setDraft(null)
     setFormOpen(true)
+  }
+
+  // The form stays open and becomes a new dish with the saved meal's details.
+  function duplicate(meal) {
+    const { id, created_at, updated_at, ...details } = meal
+    setEditing(null)
+    setDraft({ ...details, name: `${meal.name} (copy)` })
   }
 
   async function handleSave(payload) {
@@ -129,6 +141,7 @@ export default function App() {
             onReadyOnlyChange={setReadyOnly}
             editMode={editMode}
             onEditModeChange={setEditMode}
+            onAbout={() => setAboutOpen(true)}
           />
         </Group>
       </AppShell.Header>
@@ -183,6 +196,14 @@ export default function App() {
                   ))}
                 </Group>
               </Chip.Group>
+            )}
+
+            {!loading && meals.length > 0 && (
+              <Text size="sm" c="dimmed" aria-live="polite">
+                {filtered.length === meals.length
+                  ? mealCount(meals.length)
+                  : `${filtered.length} of ${mealCount(meals.length)}`}
+              </Text>
             )}
 
             {loading ? (
@@ -243,12 +264,16 @@ export default function App() {
         onClose={() => setPicked(null)}
       />
 
+      <AboutModal opened={aboutOpen} onClose={() => setAboutOpen(false)} />
+
       <MealForm
         opened={formOpen}
         meal={editing}
+        draft={draft}
         onClose={() => setFormOpen(false)}
         onSave={handleSave}
         onDelete={removeMeal}
+        onDuplicate={duplicate}
       />
     </AppShell>
   )

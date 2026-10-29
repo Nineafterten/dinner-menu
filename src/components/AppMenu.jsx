@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import {
   Burger,
+  Button,
   Divider,
   Popover,
   SegmentedControl,
@@ -11,10 +12,17 @@ import {
 } from '@mantine/core'
 
 /**
- * The header's menu: the Ready now filter, Entry mode and the theme, plus room for
+ * The header's menu: the Ready now filter, Entry mode, the theme and About, plus room for
  * settings that don't need a spot on the page. A dot on the button says a filter is on.
  */
-export function AppMenu({ readyOnly, readyCount, onReadyOnlyChange, editMode, onEditModeChange }) {
+export function AppMenu({
+  readyOnly,
+  readyCount,
+  onReadyOnlyChange,
+  editMode,
+  onEditModeChange,
+  onAbout,
+}) {
   const [opened, setOpened] = useState(false)
 
   return (
@@ -58,6 +66,21 @@ export function AppMenu({ readyOnly, readyCount, onReadyOnlyChange, editMode, on
           />
           <Divider color="var(--dm-line)" />
           <ThemeChoice />
+          <Divider color="var(--dm-line)" />
+          <Button
+            className="app-menu__about"
+            variant="subtle"
+            color="dark"
+            fw={400}
+            justify="space-between"
+            rightSection={<span className="app-menu__version">v{__APP_VERSION__}</span>}
+            onClick={() => {
+              setOpened(false)
+              onAbout()
+            }}
+          >
+            About Dinner Menu
+          </Button>
         </Stack>
       </Popover.Dropdown>
     </Popover>
